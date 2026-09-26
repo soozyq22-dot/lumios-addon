@@ -55,19 +55,17 @@ const MAP = {
     sh_5: "cover.shade_5", sh_6: "cover.shade_6", sh_7: "cover.shade_7", sh_8: "cover.shade_8",
   },
   shadeGen3: { sh_1: 1, sh_2: 2, sh_3: 3, sh_4: 4, sh_5: 5, sh_6: 6, sh_7: 7, sh_8: 8 },
-  // Lumi runs on TWO Honeywell T6 Z-Wave thermostats (one HVAC zone each):
-  // front-of-house rooms drive the FRONT thermostat, back rooms + treatment +
-  // break drive the BACK thermostat. Move a room between the two lines to re-zone.
-  temp: {
-    reception: "climate.front_hallway_thermostat",
-    pedicure:  "climate.front_hallway_thermostat",
-    manicure:  "climate.front_hallway_thermostat",
-    bath1:     "climate.front_hallway_thermostat",
-    room1:     "climate.back_hallway_thermostat",
-    room2:     "climate.back_hallway_thermostat",
-    break:     "climate.back_hallway_thermostat",
-    bath2:     "climate.back_hallway_thermostat",
-  },
+  // Both Honeywell T6 Z-Wave thermostats condition the WHOLE salon (one shared
+  // HVAC / open space), so every room targets BOTH — a temp change from any room
+  // sets both thermostats to the same value, keeping them in sync. (Home Assistant
+  // accepts an array of entity_ids on a single service call.)
+  temp: (function () {
+    const both = ["climate.front_hallway_thermostat", "climate.back_hallway_thermostat"];
+    return {
+      reception: both, pedicure: both, manicure: both,
+      room1: both, room2: both, bath1: both, bath2: both, break: both,
+    };
+  })(),
   music: {
     reception: "media_player.reception", pedicure: "media_player.pedicure", manicure: "media_player.manicure",
     room1: "media_player.treatment_room_1", room2: "media_player.treatment_room_2", break: "media_player.break_room",
@@ -209,7 +207,7 @@ module.exports = {
         z(id).light = e.state === "on";
         if (e.attributes && e.attributes.brightness != null) z(id).dim = Math.round(e.attributes.brightness / 255 * 100);
         if (e.attributes && e.attributes.color_temp_kelvin) z(id).cct = e.attributes.color_temp_kelvin; }
-      for (const id in MAP.temp) { const e = states[MAP.temp[id]]; if (e && e.attributes && e.attributes.temperature != null) z(id).temp = Math.round(e.attributes.temperature); }
+      for (const id in MAP.temp) { const key = Array.isArray(MAP.temp[id]) ? MAP.temp[id][0] : MAP.temp[id]; const e = states[key]; if (e && e.attributes && e.attributes.temperature != null) z(id).temp = Math.round(e.attributes.temperature); }
       for (const id in MAP.shades) { const e = states[MAP.shades[id]]; if (e && e.attributes && e.attributes.current_position != null) z(id).shade = e.attributes.current_position; }
       for (const id in MAP.doors) { const e = states[MAP.doors[id]]; if (e) patch.doors[id] = { locked: e.state === "locked" }; }
       return patch;
