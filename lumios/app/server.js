@@ -298,6 +298,11 @@ const server = http.createServer(async (req, res) => {
       if (!perms.canZone(user, b.zone)) return err(res, 403, "Not your assigned zone");
       try { return send(res, 200, await dm.setTemp(locId, b.zone, b.value, ctx)); } catch (e) { return err(res, 400, e.message); }
     }
+    if (method === "POST" && pathname === "/api/temp/salon") {
+      if (!p.allZones) return err(res, 403, "Salon temperature needs manager or owner");
+      const b = await readBody(req);
+      try { return send(res, 200, await dm.setSalonTemp(locId, b.value, ctx)); } catch (e) { return err(res, 400, e.message); }
+    }
     if (method === "POST" && pathname === "/api/music") {
       const b = await readBody(req);
       if (!perms.canZone(user, b.zone)) return err(res, 403, "Not your assigned zone");

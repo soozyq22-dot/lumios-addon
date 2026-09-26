@@ -324,6 +324,24 @@ async function setTemp(locId, zoneId, value, ctx = {}) {
   return z;
 }
 
+/* ---------- salon-wide thermostat ----------
+   Lumi Nails runs one shared HVAC (two Honeywell T6 thermostats that heat/cool
+   the whole open space together). This sets a single salon temperature: it moves
+   the hardware once (any zone maps to both thermostats in the real driver) and
+   mirrors that one value across every room so the UI stays consistent. */
+async function setSalonTemp(locId, value, ctx = {}) {
+  const L = loc(locId);
+  const t = clamp(Math.round(+value), 60, 85);
+  const firstZone = Object.keys(L.zones)[0];
+  await driver.setTemp(firstZone, t);
+  for (const id in L.zones) L.zones[id].temp = t;
+  persist();
+  if (ctx.log !== false)
+    audit.record({ msg: `Salon temperature set to ${t}°F`, who: ctx.who, role: ctx.role, category: "temp", loc: locId });
+  emitChange(locId, "zones");
+  return { temp: t };
+}
+
 /* ---------- music ---------- */
 async function setMusic(locId, zoneId, playlist, vol, ctx = {}) {
   const L = loc(locId);
@@ -731,7 +749,7 @@ module.exports = {
   getState, applyExternalState, startDriverSync, hasLocation, listLocations, addLocation, renameLocation, removeLocation,
   addZone, updateZone,
   setDoor, lock, unlock,
-  setLight, setCct, setColor, setOneShade, setShadeGroup, setTemp, setMusic, setMusicGroup, setAudioGroup, updateAudioGroups,
+  setLight, setCct, setColor, setOneShade, setShadeGroup, setTemp, setSalonTemp, setMusic, setMusicGroup, setAudioGroup, updateAudioGroups,
   setAutoLight, motion, autoLightTick, applyLightPreset, saveLightPreset, deleteLightPreset,
   setEquipment, addSterilization, listSterilization,
   setCamAI, detectAI, listAIEvents, setSignage,

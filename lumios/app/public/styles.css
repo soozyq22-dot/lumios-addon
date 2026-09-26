@@ -69,6 +69,13 @@ main{max-width:1100px;margin:0 auto;padding:22px 18px 70px}
 .temp-ctrl{display:flex;align-items:center;gap:10px}
 .temp-ctrl button{width:30px;height:30px;border-radius:50%;border:1px solid #e3d7de;background:#faf4f7;font-size:18px;cursor:pointer;color:var(--plum)}
 .temp-ctrl .t{font-size:18px;font-weight:600;width:54px;text-align:center}
+.salon-temp{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.salon-temp-lbl{display:flex;align-items:center;gap:9px;font-size:15px;color:var(--plum);font-weight:600}
+.salon-temp-ctrl{display:flex;align-items:center;gap:16px}
+.salon-temp-ctrl .tstep{width:46px;height:46px;border-radius:50%;border:1px solid #e3d7de;background:#faf4f7;font-size:26px;line-height:1;cursor:pointer;color:var(--plum);display:flex;align-items:center;justify-content:center}
+.salon-temp-ctrl .tstep:active{background:#f0e6d6}
+.salon-temp-val{font-size:38px;font-weight:700;color:var(--plum);min-width:96px;text-align:center;font-variant-numeric:tabular-nums;font-family:'Cormorant Garamond',Georgia,serif}
+.salon-temp-unit{font-size:18px;color:var(--muted);margin-left:2px}
 select.mini{border:1px solid #e3d7de;border-radius:10px;padding:6px 8px;font-size:13px;background:#fff;color:var(--ink)}
 .doors,.cams{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .door{display:flex;align-items:center;justify-content:space-between}

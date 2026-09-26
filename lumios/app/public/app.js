@@ -156,7 +156,7 @@ const sceneIcon = (sc) => ({ open: ICON.sun, treat: ICON.leaf, close: ICON.moon,
 function cctLabel(k) { k = k || 3000; const t = k <= 3000 ? "Warm" : k >= 4600 ? "Cool" : "Neutral"; return `${t} · ${k}K`; }
 
 function renderAll() {
-  renderHeader(); renderScenes(); renderZones(); renderSoundZones(); renderGroupAudio(); renderShades(); renderGroupShades(); renderDoors();
+  renderHeader(); renderScenes(); renderSalonTemp(); renderZones(); renderSoundZones(); renderGroupAudio(); renderShades(); renderGroupShades(); renderDoors();
   renderTurnover(); renderChecklist(); renderAroma();
   renderSignage(); renderRoomAccess(); renderSecurity(); renderSafety(); renderCams(); renderEnergy();
   renderEquipment(); renderFridge(); renderReports(); renderSterilization(); renderSchedule();
@@ -573,6 +573,27 @@ function pickTreatmentRoom(key, sc) {
 function showModal(html) { document.getElementById("modalCard").innerHTML = html; document.getElementById("modal").style.display = "flex"; }
 function closeModal() { document.getElementById("modal").style.display = "none"; }
 
+function renderSalonTemp() {
+  const wrap = document.getElementById("salonTemp");
+  if (!wrap) return;
+  if (!P().allZones) { wrap.innerHTML = '<div class="hint">Salon temperature is available to managers and owners.</div>'; return; }
+  const ids = Object.keys(STATE.zones || {});
+  const cur = ids.length ? STATE.zones[ids[0]].temp : 72;
+  wrap.innerHTML = `
+    <div class="salon-temp">
+      <div class="salon-temp-lbl"><span class="e">${ICON.temp}</span> Whole salon — both thermostats</div>
+      <div class="salon-temp-ctrl">
+        <button class="tstep" data-salon="-1" aria-label="Cooler">−</button>
+        <span class="salon-temp-val">${cur}°<span class="salon-temp-unit">F</span></span>
+        <button class="tstep" data-salon="1" aria-label="Warmer">+</button>
+      </div>
+    </div>`;
+  wrap.querySelectorAll("[data-salon]").forEach((b) => b.onclick = () => {
+    const now = STATE.zones[Object.keys(STATE.zones)[0]].temp;
+    cmd("/api/temp/salon", { value: now + (+b.dataset.salon) });
+  });
+}
+
 const expandedZones = new Set();
 function renderZones() {
   const wrap = document.getElementById("zones");
@@ -585,7 +606,7 @@ function renderZones() {
     const plOpts = STATE.playlists.map((p) => `<option ${p === z.music ? "selected" : ""}>${p}</option>`).join("");
     card.innerHTML = `
       <h3>${z.name} ${P().cameras ? `<button class="hist" data-hist="${id}" title="Recent changes">${ICON.clock}</button>` : ""}</h3>
-      <div class="zone-meta">${z.light ? `Lights ${z.dim}%` : "Lights off"} · ${z.temp}°F · ${z.music === "off" ? "No music" : z.music}</div>
+      <div class="zone-meta">${z.light ? `Lights ${z.dim}%` : "Lights off"} · ${z.music === "off" ? "No music" : z.music}</div>
       <div class="row"><span class="lbl"><span class="e">${ICON.bulb}</span> Lights</span>
         <label class="toggle"><input type="checkbox" ${z.light ? "checked" : ""} data-light="${id}"><span class="slider-t"></span></label></div>
       <div class="dim"><span class="e">${ICON.sun}</span>
@@ -613,9 +634,6 @@ function renderZones() {
           <a href="#" class="mini-link" data-motiontest="${id}">test</a>
           <label class="toggle"><input type="checkbox" ${z.autoLight ? "checked" : ""} data-auto="${id}"><span class="slider-t"></span></label>
         </span></div>
-      <div class="row"><span class="lbl"><span class="e">${ICON.temp}</span> Temperature</span>
-        <span class="temp-ctrl"><button data-temp="${id}" data-d="-1">−</button>
-          <span class="t">${z.temp}°</span><button data-temp="${id}" data-d="1">+</button></span></div>
       <div class="row"><span class="lbl"><span class="e">${ICON.music}</span> Music</span>
         <select class="mini" data-music="${id}">${plOpts}</select></div>
       <div class="dim"><span class="e">${ICON.volume}</span>
