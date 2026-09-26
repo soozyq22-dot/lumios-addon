@@ -971,16 +971,43 @@ async function enablePush() {
   } catch (e) { toast("🔔 Couldn't enable alerts: " + e.message); }
 }
 
-/* ============ REAL-TIME (SSE) ============ */
+/* ============ REAL-TIME (SSE) ============
+   Keeps every device (phone, computer, iPad) showing the same live state.
+   A change on any device is broadcast to all the others, which resync.     */
+let es = null;
+let streamRetry = null;
 function connectStream() {
-  const es = new EventSource("/api/stream?token=" + encodeURIComponent(TOKEN));
-  es.addEventListener("change", (e) => { const d = JSON.parse(e.data); if (!d.loc || d.loc === activeLoc) refresh(); });
+  try { if (es) es.close(); } catch {}
+  clearTimeout(streamRetry);
+  es = new EventSource("/api/stream?token=" + encodeURIComponent(TOKEN));
+  // The server sends "hello" on every (re)connect — pull fresh state so a device
+  // that was asleep or briefly offline catches up on anything it missed.
+  es.addEventListener("hello", () => { refresh().catch(() => {}); });
+  es.addEventListener("change", (e) => { const d = JSON.parse(e.data); if (!d.loc || d.loc === activeLoc) refresh().catch(() => {}); });
   es.addEventListener("log", () => renderLog());
-  es.addEventListener("locations", () => refresh());
+  es.addEventListener("locations", () => refresh().catch(() => {}));
   es.addEventListener("scene", (e) => { const d = JSON.parse(e.data); if (d.loc === activeLoc) toast("✨ " + d.label); });
   es.addEventListener("alert", (e) => { const d = JSON.parse(e.data); const at = (d.locName && d.loc !== activeLoc ? " @ " + d.locName : ""); toast((d.ai ? `🤖 AI: ${d.ai} at ` : "🚨 Motion: ") + d.name + at); });
   es.addEventListener("push", (e) => { const d = JSON.parse(e.data); notify(d.title, d.body); });
-  es.onerror = () => { /* browser auto-reconnects */ };
+  es.onerror = () => {
+    // If the browser gave up entirely (readyState 2 = CLOSED), reconnect ourselves
+    // so the device never gets stuck showing stale state (common on iOS after sleep).
+    if (es && es.readyState === 2) { clearTimeout(streamRetry); streamRetry = setTimeout(connectStream, 3000); }
+  };
+}
+// Whenever a device becomes active again — wake from sleep, tab refocus, network
+// restored — immediately resync so all screens match.
+function resync() {
+  if (!TOKEN) return;
+  refresh().catch(() => {});
+  if (!es || es.readyState === 2) connectStream();
+}
+let resyncBound = false;
+function bindResync() {
+  if (resyncBound) return; resyncBound = true;
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") resync(); });
+  window.addEventListener("focus", resync);
+  window.addEventListener("online", resync);
 }
 function notify(title, body) {
   toast("🔔 " + body);
@@ -1000,6 +1027,7 @@ async function boot() {
   await refresh();
   await renderLog();
   connectStream();
+  bindResync();
   setupVoice();
   registerSW();
   document.getElementById("simMotion").onclick = (e) => { e.preventDefault(); api("/api/simulate/motion", { method: "POST", body: { camId: "back" } }); };
