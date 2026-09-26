@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumi Daily Quick-Start</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--plum:#2b2018;--rose:#9a6f35;--gold:#c9a96e;--cream:#f8f4ee;--ink:#111;--muted:#8a7f70;--ok:#6f9e7e}
+  *{box-sizing:border-box}
+  body{margin:0;background:#efe7ec;color:var(--ink);font-family:'Jost',-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+  .sheet{max-width:880px;margin:24px auto;background:#fff;padding:36px 44px;box-shadow:0 6px 24px rgba(43,32,24,.14);border-radius:10px}
+  header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:16px;margin-bottom:6px}
+  .logo{width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--gold),var(--rose));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:26px}
+  h1{margin:0;font-size:25px;color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-weight:600}
+  header small{color:var(--muted)}
+  .cols{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px}
+  .col{flex:1;min-width:300px}
+  .step{border:1px solid #eee;border-radius:14px;padding:13px 16px;margin-bottom:12px}
+  .step h2{margin:0 0 6px;font-size:17px;color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;display:flex;align-items:center;gap:8px}
+  .pill{display:inline-block;background:#f3ece0;border:1px solid #e7ddcc;color:var(--plum);border-radius:14px;padding:2px 10px;font-size:13px;font-weight:600;margin:2px 2px 0 0}
+  .step p,.step li{font-size:14px;margin:4px 0}
+  ul{margin:4px 0;padding-left:18px}
+  .say{color:var(--rose);font-style:italic}
+  .tip{background:#f4fbf6;border:1px solid #d8ecdf;border-radius:12px;padding:12px 16px;margin-top:10px;font-size:14px}
+  .warn{background:#fdeeee;border-color:#e7b7b7}
+  .toolbar{max-width:880px;margin:0 auto;text-align:right}
+  .btn{background:var(--plum);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
+  footer{margin-top:20px;border-top:1px solid #eee;padding-top:12px;color:var(--muted);font-size:12px}
+  @media print{body{background:#fff}.toolbar{display:none}.sheet{box-shadow:none;margin:0;max-width:none;padding:0 6px;border-radius:0}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Print</button></div>
+<div class="sheet">
+  <header>
+    <div class="logo">L</div>
+    <div><h1>Lumi Daily Quick-Start</h1>
+      <small>Running the spa with LumiOS — a quick guide for the team</small></div>
+  </header>
+
+  <div class="tip"><b>Sign in:</b> on the front-desk tablet, tap your 4-digit <b>PIN</b> (Manager/Staff sign in directly; the <b>Owner</b> PIN adds a quick 2-factor code step). Use the 🎙️ <b>Voice</b> button (top-right) any time instead of tapping.</div>
+
+  <div class="cols">
+    <div class="col">
+      <div class="step">
+        <h2>☀️ Opening up</h2>
+        <p>Tap the <span class="pill">Open</span> scene — or say <span class="say">"Good morning Lumi."</span></p>
+        <p>Unlocks the front door, brings up the lights, starts calm music, sets a comfy temperature, and turns on the Open sign.</p>
+        <p>Then run down the <b>Opening Checklist</b> and tick each item — it resets fresh every morning.</p>
+      </div>
+      <div class="step">
+        <h2>🌸 Prepping a treatment room</h2>
+        <p>Tap <span class="pill">Treatment Mode</span> and pick the room.</p>
+        <p>Dims that room to a soft, warm light, lowers the shade for privacy, sets a cozy temperature, and plays spa music — just for that room.</p>
+      </div>
+      <div class="step">
+        <h2>🎵 Setting the vibe</h2>
+        <ul>
+          <li><b>One room:</b> open its card, change Music, Light tone or Accent color.</li>
+          <li><b>Whole areas:</b> use <b>Sound Zones</b> — e.g. upbeat up front, calm in treatment rooms, at the same time.</li>
+          <li>Tap <b>More</b> on a room card for tone, color, presets &amp; shades.</li>
+          <li><b>Aromatherapy:</b> turn a diffuser on and pick a scent (Lavender, Eucalyptus…) per area.</li>
+        </ul>
+      </div>
+      <div class="step">
+        <h2>🔑 Your room</h2>
+        <p>Under <b>Room Access</b>, unlock the treatment room you're assigned to. Every entry is logged automatically.</p>
+      </div>
+      <div class="step">
+        <h2>🔄 Room turnover</h2>
+        <p>On the <b>Room Turnover</b> board, tap a room's status as you go:</p>
+        <ul>
+          <li><b>In use</b> when a client's in the room</li>
+          <li><b>Clean</b> when they leave (needs turnover)</li>
+          <li><b>Ready</b> once it's sanitized and set</li>
+        </ul>
+        <p>The front desk sees at a glance which rooms are open.</p>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="step">
+        <h2>🧼 Autoclave — every cycle</h2>
+        <p>After each sterilization run, open the <b>Autoclave Sterilization Log</b> and record it: operator, load, cycle, and <b>Pass/Fail</b>. Run the weekly <b>spore test</b> and log it too. This is your compliance record.</p>
+      </div>
+      <div class="step">
+        <h2>🌙 Closing up</h2>
+        <ul>
+          <li><span class="pill">Goodnight</span> — gentle wind-down (soft lights, shades down, armed Home).</li>
+          <li><span class="pill">Close</span> — locks all doors, lights off, music off, flips the sign to <b>Closed</b>, cameras to night watch.</li>
+          <li><span class="pill">Away / Alarm</span> — full lockdown + motion alerts to the owner.</li>
+        </ul>
+        <p class="say">Say "Lock up for the night" to run Close.</p>
+        <p>Finish by ticking the <b>Closing Checklist</b> so nothing's missed.</p>
+      </div>
+      <div class="step">
+        <h2>🎙️ Handy voice commands</h2>
+        <ul style="list-style:none;padding-left:0">
+          <li class="say">"Good morning Lumi" · "Lock up for the night"</li>
+          <li class="say">"Treatment room 2"</li>
+          <li class="say">"Set reception to 72" · "Dim pedicure to 40%"</li>
+          <li class="say">"Play calm spa everywhere"</li>
+          <li class="say">"Disarm the alarm" · "Show the back camera"</li>
+        </ul>
+      </div>
+      <div class="tip warn">
+        <b>If something looks off</b> — a door won't lock, a light won't respond, or a device shows <b>offline</b> in Equipment — <b>tell the manager</b>. Don't force it; the manager or owner can sort it out.
+      </div>
+    </div>
+  </div>
+
+  <footer>Lumi Nails &amp; Med Spa · LumiOS · Keep this at the front desk. Your role decides what you can control — that's normal.</footer>
+</div>
+</body>
+</html>

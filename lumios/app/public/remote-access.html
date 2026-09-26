@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumiOS — Remote Access Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--plum:#2b2018;--rose:#9a6f35;--gold:#c9a96e;--cream:#f8f4ee;--ink:#111111;--muted:#8a7f70;--ok:#6f9e7e;--bad:#bf5b50}
+  *{box-sizing:border-box}
+  body{margin:0;background:#efe7ec;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+  .sheet{max-width:860px;margin:24px auto;background:#fff;padding:38px 44px;box-shadow:0 6px 24px rgba(58,37,53,.14);border-radius:10px}
+  header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:16px;margin-bottom:14px}
+  .logo{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--rose),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:24px}
+  h1{margin:0;font-size:23px;color:var(--plum)}
+  header small{color:var(--muted)}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin:24px 0 10px}
+  p,li{font-size:14.5px}
+  ol li,ul li{margin:6px 0}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #eee;vertical-align:top}
+  th{background:#faf4f7;color:var(--plum);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+  td.y{color:var(--ok);font-weight:700}
+  .callout{border-radius:12px;padding:12px 16px;margin-top:10px;font-size:14px;border:1px solid #d8ecdf;background:#f4fbf6}
+  .warn{background:#fdf6ee;border-color:#f0dcc2}
+  .bad{background:#fdeeee;border-color:#e7b7b7}
+  code{background:#f4eef1;padding:1px 5px;border-radius:5px;font-size:12.5px}
+  .toolbar{max-width:860px;margin:0 auto;text-align:right}
+  .btn{background:var(--plum);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
+  footer{margin-top:24px;border-top:1px solid #eee;padding-top:12px;color:var(--muted);font-size:12px}
+  @media print{body{background:#fff}.toolbar{display:none}.sheet{box-shadow:none;margin:0;max-width:none;padding:0 6px;border-radius:0}h2{color:var(--plum)}}
+  body{font-family:'Jost',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Print / Save as PDF</button></div>
+<div class="sheet">
+  <header>
+    <div class="logo">L</div>
+    <div><h1>Remote Access Setup</h1>
+      <small>Lumi Nails &amp; Med Spa — reach LumiOS from your phone, safely (for the manager/installer)</small></div>
+  </header>
+
+  <h2>Why</h2>
+  <p><b>The one reason:</b> to control LumiOS from <b>outside the salon</b> (your phone at home or on the road),
+  over a <b>private, encrypted</b> connection — without ever putting a door-and-security system on the public internet.
+  Inside the salon on Wi-Fi you don't need any of this; it's only for the away-from-building case and phone alerts.</p>
+
+  <div class="callout warn">
+    <b>Read this first — two things people get wrong:</b>
+    <ul style="margin:6px 0 0">
+      <li><b>Installing the app + push alerts need a real HTTPS address.</b> Plain device/Wi-Fi/Tailscale
+      <i>IP</i> addresses (<code>http://…</code>) are treated as "insecure" by phones, so "Add to Home Screen" and
+      notifications won't turn on. You need a proper <code>https://</code> name (set up below). Use that same HTTPS
+      address even on the front-desk tablet so the app installs there too.</li>
+      <li><b>Push alerts need the LumiOS host to have internet.</b> Control still works fully offline (local-first),
+      but the alert itself is sent out through Apple/Google's servers — so an outage means no push goes out until
+      the internet is back. iPhones also require <b>iOS 16.4+</b> and "Add to Home Screen" first.</li>
+    </ul>
+  </div>
+
+  <h2>Option A — Tailscale (recommended · free · no domain)</h2>
+  <p>A private network app. Only your own devices can reach LumiOS; nothing is exposed to the public.</p>
+  <ol>
+    <li>Make a free <b>Tailscale</b> account.</li>
+    <li>Install Tailscale on the <b>LumiOS host</b> (the mini-PC/Pi) and sign in.</li>
+    <li>Turn on its HTTPS address: run <code>tailscale serve https / http://localhost:4200</code>.
+      This gives a secure name like <code>https://lumios.your-tailnet.ts.net</code>.</li>
+    <li>Install the <b>Tailscale app on each phone</b> that needs remote access and sign in to the same account.</li>
+    <li>Put that <code>https://…ts.net</code> address on the <b>Install guide</b> sheet. Open it → Add to Home Screen → enable alerts.</li>
+  </ol>
+  <div class="callout"><b>Note:</b> a phone needs the Tailscale app connected to <i>open/use</i> LumiOS remotely.
+  (Push <i>alerts</i> still arrive via Apple/Google even when Tailscale is off — but to act on one, you open the app through Tailscale.)</div>
+
+  <h2>Option B — Cloudflare Tunnel (uses your existing domain)</h2>
+  <p>Gives a nicer fixed address and doesn't require the Tailscale app on each phone. You already own
+  <code>luminailsandmedspa.com</code>, so there's nothing to buy — use a subdomain like
+  <code>lumios.luminailsandmedspa.com</code>.</p>
+  <ol>
+    <li>Add the domain to a free Cloudflare account; install <code>cloudflared</code> on the LumiOS host.</li>
+    <li>Create a tunnel pointing the subdomain at <code>http://localhost:4200</code> — Cloudflare provides the HTTPS.</li>
+    <li><b>Keep it private:</b> require sign-in (Cloudflare Access) <i>and</i> rely on LumiOS's own login + 2FA.</li>
+  </ol>
+
+  <h2>Which to pick</h2>
+  <table>
+    <tr><th></th><th>Tailscale</th><th>Cloudflare Tunnel</th></tr>
+    <tr><td>Cost / domain</td><td class="y">Free, no domain</td><td>Free, uses your domain</td></tr>
+    <tr><td>App on each phone?</td><td>Yes (Tailscale app)</td><td class="y">No</td></tr>
+    <tr><td>Public-facing?</td><td class="y">No — fully private</td><td>Yes, but behind sign-in</td></tr>
+    <tr><td>Best for</td><td>You + a few managers</td><td>A memorable shared address</td></tr>
+  </table>
+
+  <div class="callout bad">
+    <b>Never skip the protection.</b> Because LumiOS unlocks doors, do <b>not</b> port-forward it or put it on a
+    plain public URL. Always keep it behind Tailscale (private) or Cloudflare Access, <b>plus</b> LumiOS's own
+    sign-in with owner 2-factor on and the demo PINs/passwords changed.
+  </div>
+
+  <footer>Lumi Nails &amp; Med Spa · LumiOS · One-time setup by the manager or installer. See also <code>docs/SETUP.md</code>.</footer>
+</div>
+</body>
+</html>

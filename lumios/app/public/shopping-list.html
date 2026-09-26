@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumiOS — Hardware Shopping Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--plum:#2b2018;--rose:#9a6f35;--gold:#c9a96e;--cream:#f8f4ee;--ink:#111;--muted:#8a7f70;--ok:#6f9e7e;--bad:#bf5b50;--blue:#2b6cb0}
+  *{box-sizing:border-box}
+  body{margin:0;background:#efe7ec;color:var(--ink);font-family:'Jost',-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+  .sheet{max-width:920px;margin:24px auto;background:#fff;padding:36px 40px;box-shadow:0 6px 24px rgba(43,32,24,.14);border-radius:10px}
+  header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:16px;margin-bottom:12px}
+  .logo{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--gold),var(--rose));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:24px}
+  h1{margin:0;font-size:23px;color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-weight:600}
+  header small{color:var(--muted)}
+  h2{font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin:22px 0 4px}
+  .stg{color:var(--muted);font-size:12.5px;margin:0 0 6px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid #eee;vertical-align:top}
+  th{background:#faf4f7;color:var(--plum);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+  td.q{white-space:nowrap;color:var(--ok);font-weight:700}
+  td.box{font-size:16px;color:var(--gold)}
+  a{color:var(--rose);text-decoration:none}a:hover{text-decoration:underline}
+  .callout{border-radius:12px;padding:12px 16px;margin-top:10px;font-size:13.5px;border:1px solid #d8ecdf;background:#f4fbf6}
+  .warn{background:#fdf6ee;border-color:#f0dcc2}
+  .tag{display:inline-block;font-size:9.5px;font-weight:700;border-radius:6px;padding:1px 6px;margin-left:3px;white-space:nowrap}
+  .tag.pro{background:#fdeeee;color:var(--bad)}.tag.diy{background:#eaf3ee;color:var(--ok)}
+  .tag.handy{background:#e7eef5;color:var(--blue)}.tag.prem{background:#efe3cf;color:#7a5a22}
+  .toolbar{max-width:920px;margin:0 auto;text-align:right}
+  .btn{background:var(--plum);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
+  footer{margin-top:20px;border-top:1px solid #eee;padding-top:12px;color:var(--muted);font-size:11.5px}
+  @media print{body{background:#fff}.toolbar{display:none}.sheet{box-shadow:none;margin:0;max-width:none;padding:0 6px;border-radius:0}h2{color:var(--plum)}a{color:var(--ink)}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Print / Save as PDF</button></div>
+<div class="sheet">
+  <header>
+    <div class="logo">L</div>
+    <div><h1>Hardware Shopping Checklist</h1>
+      <small>Lumi Nails &amp; Med Spa · 2111 S Wabash · staged by priority, all Home-Assistant compatible</small></div>
+  </header>
+
+  <div class="callout warn">
+    <b>Who installs what:</b>
+    <span class="tag diy">DIY</span> you/staff plug &amp; pair ·
+    <span class="tag handy">HANDY</span> a handyman (mounting, brackets — no license) ·
+    <span class="tag pro">PRO</span> licensed electrician / low-voltage / locksmith ·
+    <span class="tag auto">†</span> needs a small one-time HA automation.
+    <span class="tag pro">DEALER</span> Hunter Douglas dealer measures &amp; installs.
+    <br><b>Money-saver baked in:</b> <b>WiFi cameras</b> (handyman mounts, no cabling contractor). Prices are mid-2026 — verify at checkout.
+  </div>
+  <div class="callout">
+    <b>Per your plans (Wallin Gomez A10/A40):</b> <b>1 HVAC zone</b> → 1 thermostat · <b>3 keyless doors</b>
+    (Door 01 glass entry + Treatment 104/105) · <b>8 Hunter Douglas PowerView Gen 3 shades</b> (+ Gen 3 Gateway, reserve its IP) on reception/pedicure glazing · hub + UPS + LumiOS PC
+    <b>by the existing electric panel</b>. <b>What still needs a licensed pro no matter what:</b> the thermostat,
+    the glass-door electric strike, the door locks, sirens/alarm tie-in, and the exterior-sign wiring.
+  </div>
+
+  <h2>Stage 1 · Foundation</h2>
+  <p class="stg">Do first — nothing works without the brain. ~$750–950 · almost all DIY.</p>
+  <table>
+    <tr><th></th><th>Item</th><th>Model</th><th>Qty</th><th>~$</th><th>Buy</th></tr>
+    <tr><td class="box">☐</td><td>On-site hub <span class="tag diy">DIY</span></td><td>Home Assistant Green</td><td class="q">1</td><td>$99</td><td><a href="https://www.amazon.com/s?k=Home+Assistant+Green" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Radio sticks <span class="tag diy">DIY</span></td><td>HA Connect ZBT-1 + Zooz ZST39 (Z-Wave)</td><td class="q">1 ea</td><td>$60</td><td><a href="https://www.amazon.com/s?k=Home+Assistant+Connect+ZBT-1" target="_blank">ZBT-1</a> · <a href="https://www.amazon.com/s?k=Zooz+ZST39+800" target="_blank">Zooz</a></td></tr>
+    <tr><td class="box">☐</td><td>LumiOS mini-PC <span class="tag diy">DIY</span></td><td>Beelink / GMKtec N100</td><td class="q">1</td><td>$130</td><td><a href="https://www.amazon.com/s?k=Beelink+N100+mini+pc" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Battery backup <span class="tag diy">DIY</span></td><td>CyberPower CP1500PFCLCD</td><td class="q">1</td><td>$170</td><td><a href="https://www.amazon.com/s?k=CyberPower+CP1500PFCLCD" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Front-desk tablet + mount <span class="tag diy">DIY</span> <span class="tag handy">HANDY</span></td><td>iPad/Android + wall mount (handyman hangs it)</td><td class="q">1</td><td>$200–400</td><td><a href="https://www.amazon.com/s?k=tablet+wall+mount" target="_blank">Amazon</a></td></tr>
+  </table>
+
+  <h2>Stage 2 · Lighting &amp; climate</h2>
+  <p class="stg">The daily experience — Open/Close, dimming, tone. ~$1,000–1,600. Bulbs are DIY (screw-in), so no electrician.</p>
+  <table>
+    <tr><th></th><th>Item</th><th>Model</th><th>Qty</th><th>~$</th><th>Buy</th></tr>
+    <tr><td class="box">☐</td><td>Lighting hub <span class="tag diy">DIY</span></td><td>Philips Hue Bridge</td><td class="q">1</td><td>$60</td><td><a href="https://www.amazon.com/s?k=Philips+Hue+Bridge" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Smart bulbs (tunable + color) <span class="tag diy">DIY</span></td><td>Philips Hue White &amp; Color Ambiance</td><td class="q">~20</td><td>$45 ea</td><td><a href="https://www.amazon.com/s?k=Philips+Hue+White+and+Color+Ambiance" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Thermostat <span class="tag pro">PRO</span> <i>(C-wire)</i></td><td>Honeywell T6 Pro Z-Wave (TH6320ZW) — replaces existing</td><td class="q">1</td><td>$90</td><td><a href="https://www.amazon.com/s?k=Honeywell+T6+Pro+Z-Wave+TH6320ZW" target="_blank">Amazon</a></td></tr>
+  </table>
+
+  <h2>Stage 3 · Security &amp; safety</h2>
+  <p class="stg">Protects the business + insurance + fire code — do before you open. ~$1,800–2,300.</p>
+  <table>
+    <tr><th></th><th>Item</th><th>Model</th><th>Qty</th><th>~$</th><th>Buy</th></tr>
+    <tr><td class="box">☐</td><td>AI cameras (4K WiFi) <span class="tag handy">HANDY</span><span class="tag auto">†</span></td><td>Reolink RLC-811WA (WiFi) <span class="tag prem">Premium: Hanwha/Axis</span></td><td class="q">7</td><td>$80–100 ea</td><td><a href="https://www.amazon.com/s?k=Reolink+RLC-811WA" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Camera recorder <span class="tag handy">HANDY</span> <span class="tag diy">DIY</span></td><td>Reolink NVR (local, no sub)</td><td class="q">1</td><td>$230</td><td><a href="https://www.amazon.com/s?k=Reolink+NVR" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Front entry lock <span class="tag pro">PRO</span></td><td><b>Door 01 (glass)</b> → electric strike + keypad/reader</td><td class="q">1</td><td>$250–450</td><td><a href="https://www.amazon.com/s?k=glass+door+electric+strike+keypad+access+control" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Smoke + CO <span class="tag pro">PRO</span> <i>(supplements code system)</i></td><td>First Alert ZCOMBO (Z-Wave)</td><td class="q">2–3</td><td>$40 ea</td><td><a href="https://www.amazon.com/s?k=First+Alert+ZCOMBO+Z-Wave" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Alarm sirens <span class="tag pro">PRO</span></td><td>Aeotec Siren 6 (Z-Wave)</td><td class="q">2</td><td>$65 ea</td><td><a href="https://www.amazon.com/s?k=Aeotec+Siren+6" target="_blank">Amazon</a></td></tr>
+  </table>
+
+  <h2>Stage 4 · Ambiance extras</h2>
+  <p class="stg">Biggest comfort/vibe payoff — can follow a beat later. ~$3,000–4,500.</p>
+  <table>
+    <tr><th></th><th>Item</th><th>Model</th><th>Qty</th><th>~$</th><th>Buy</th></tr>
+    <tr><td class="box">☐</td><td>Motorized shades <span class="tag pro">DEALER</span></td><td><b>Hunter Douglas — PowerView Gen 3 motorization</b> (order through a HD dealer)</td><td class="q">8</td><td><b>~$11,000</b> (quoted)</td><td><a href="https://www.hunterdouglas.com/operating-systems/motorization/powerview" target="_blank">hunterdouglas.com</a></td></tr>
+    <tr><td class="box">☐</td><td>PowerView Gen 3 <b>Gateway</b> <span class="tag pro">REQUIRED</span></td><td>The one piece that exposes the <b>network API</b> LumiOS calls — add it at order time; reserve its IP in the router</td><td class="q">1</td><td>~$200</td><td><a href="https://www.hunterdouglas.com/faqs/powerview-3-gateway" target="_blank">hunterdouglas.com</a></td></tr>
+    <tr><td class="box">☐</td><td>Audio (sound zones) <span class="tag diy">DIY</span></td><td>Sonos Era 100 (per area)</td><td class="q">~4–6</td><td>$249 ea</td><td><a href="https://www.sonos.com/shop/era-100" target="_blank">sonos.com</a> · <a href="https://www.amazon.com/s?k=Sonos+Era+100" target="_blank">Amazon</a></td></tr>
+  </table>
+
+  <h2>Stage 5 · Automation polish</h2>
+  <p class="stg">Convenience layer — add last. ~$600–900, mostly DIY.</p>
+  <table>
+    <tr><th></th><th>Item</th><th>Model</th><th>Qty</th><th>~$</th><th>Buy</th></tr>
+    <tr><td class="box">☐</td><td>Motion sensors <span class="tag diy">DIY</span><span class="tag auto">†</span></td><td>Aqara Motion Sensor P1</td><td class="q">~4</td><td>$20 ea</td><td><a href="https://www.amazon.com/s?k=Aqara+Motion+Sensor+P1" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Door contact sensors <span class="tag diy">DIY</span><span class="tag auto">†</span></td><td>Aqara sensor on each treatment-room door</td><td class="q">2</td><td>$15 ea</td><td><a href="https://www.amazon.com/s?k=Aqara+Door+and+Window+Sensor" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Treatment-room locks <span class="tag pro">PRO</span></td><td><b>Doors 02/03</b> → keypad lock or strike + Zooz ZEN16</td><td class="q">2</td><td>$120–250 ea</td><td><a href="https://www.amazon.com/s?k=Yale+Assure+Lock+2+keypad+Z-Wave" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Exterior sign control <span class="tag pro">PRO</span> <i>(wiring)</i></td><td>Shelly Plus 1 relay + Shelly Plug</td><td class="q">2–3</td><td>$20 ea</td><td><a href="https://www.amazon.com/s?k=Shelly+Plus+1" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Video intercom <span class="tag handy">HANDY</span><span class="tag auto">†</span></td><td>Reolink WiFi video doorbell (2-way audio)</td><td class="q">1</td><td>$100</td><td><a href="https://www.amazon.com/s?k=Reolink+Video+Doorbell+WiFi" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Autoclave monitor <span class="tag diy">DIY</span></td><td>Shelly Plug US (energy monitoring)</td><td class="q">1</td><td>$20</td><td><a href="https://www.amazon.com/s?k=Shelly+Plug+US" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Phone system <span class="tag diy">DIY</span> <i>(monthly service fee)</i></td><td>Ooma Office (VoIP) + handsets</td><td class="q">1</td><td>$100 + svc</td><td><a href="https://www.amazon.com/s?k=Ooma+Office" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Camera video relay <span class="tag diy">DIY</span> <i>(free)</i></td><td>go2rtc or Frigate (runs on the hub)</td><td class="q">—</td><td>$0</td><td><a href="https://github.com/AlexxIT/go2rtc" target="_blank">go2rtc</a></td></tr>
+  </table>
+
+  <h2>Phase 5 · Spa health &amp; experience</h2>
+  <table>
+    <tr><th></th><th>Item</th><th>Model</th><th>Qty</th><th>~$</th><th>Buy</th></tr>
+    <tr><td class="box">☐</td><td>Medical-fridge temp sensor <span class="tag diy">DIY</span><span class="tag auto">†</span></td><td>SensorPush HT.w (with probe) or Aqara temp sensor — logs fridge temp</td><td class="q">1</td><td>$20–60</td><td><a href="https://www.amazon.com/s?k=SensorPush+temperature+probe" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Aromatherapy diffusers <span class="tag handy">HANDY</span></td><td>Nebulizing diffuser + Shelly smart plug (per area: reception, nail-tech, treatment)</td><td class="q">3</td><td>$40–80 ea</td><td><a href="https://www.amazon.com/s?k=nebulizing+essential+oil+diffuser" target="_blank">Amazon</a></td></tr>
+    <tr><td class="box">☐</td><td>Reception welcome display <span class="tag handy">HANDY</span></td><td>Small wall screen or spare tablet (shows the welcome message)</td><td class="q">1</td><td>$150–250</td><td><a href="https://www.amazon.com/s?k=15+inch+wall+mount+display" target="_blank">Amazon</a></td></tr>
+  </table>
+  <p style="font-size:12px;color:var(--muted)">Room turnover board, opening/closing checklist, energy-cost tracking and the owner digest are <b>software only</b> — no hardware needed (turnover uses the door sensors above).</p>
+
+  <h2>Who does what — three tiers</h2>
+  <table>
+    <tr><th>Tier</th><th>Who</th><th>Handles</th></tr>
+    <tr><td><span class="tag diy">DIY</span></td><td>You / staff</td><td>Hub, radios, mini-PC, UPS, Hue bulbs + Bridge, Aqara sensors, Sonos, Shelly plugs, tablet setup, the LumiOS app</td></tr>
+    <tr><td><span class="tag handy">HANDY</span></td><td>Handyman (~$40–75/hr, no license)</td><td>Hang the wall tablet, mount the <b>WiFi cameras</b> + NVR, mount the video doorbell, place/rack the hub &amp; UPS by the panel, mount Sonos brackets</td></tr>
+    <tr><td><span class="tag pro">DEALER</span></td><td>Hunter Douglas dealer</td><td>Measure, order &amp; install the <b>PowerView Gen 3 shades + Gateway</b> (reserve the Gateway's IP)</td></tr>
+    <tr><td><span class="tag pro">PRO</span></td><td>Licensed electrician / low-voltage / locksmith (~$100–175/hr)</td><td>Thermostat wiring, the <b>glass-door electric strike</b> + treatment-room locks (to egress/fire code), <b>sirens/alarm tie-in</b>, exterior-sign wiring, any new circuit or line-voltage work</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <b>Totals:</b> Other equipment (everything except shades) ≈ <b>$5,000–7,000</b> · <b>Hunter Douglas shades ≈ $11,000</b>
+    (dealer quote, measure + install included) · installer labor ≈ <b>$4,000–10,000</b>. <b>All-in ≈ $20,000–28,000.</b>
+    The shades are the biggest line and the most deferrable — you can add them in a later phase. Consider a
+    <b>second HD dealer quote</b> (pricing varies a lot) before committing.
+  </div>
+
+  <footer>Lumi Nails &amp; Med Spa · LumiOS · Open standards + Home Assistant. Links are model searches — confirm model &amp; price before buying. In Chicago, electrical / alarm / egress-door work must be done by a licensed pro.</footer>
+</div>
+</body>
+</html>

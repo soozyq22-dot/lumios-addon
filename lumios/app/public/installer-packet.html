@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumi — Installer Packet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--plum:#2b2018;--rose:#9a6f35;--gold:#c9a96e;--cream:#f8f4ee;--ink:#141414;--muted:#8a7f70;--line:#e8e0d4}
+  *{box-sizing:border-box}
+  body{margin:0;background:#efe7ec;color:var(--ink);font-family:'Jost',-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.45;font-size:13px}
+  .page{max-width:860px;margin:20px auto;background:#fff;padding:40px 48px;box-shadow:0 6px 24px rgba(43,32,24,.14);border-radius:10px}
+  header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:14px;margin-bottom:14px}
+  .logo{width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--gold),var(--rose));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:26px}
+  h1{margin:0;font-size:26px;color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-weight:600}
+  header small{color:var(--muted)}
+  h2{font-size:12.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold);margin:22px 0 8px;border-bottom:1px solid var(--line);padding-bottom:5px}
+  h3{font-size:15px;color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:14px 0 4px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}
+  th,td{text-align:left;padding:6px 9px;border-bottom:1px solid #eee;vertical-align:top}
+  th{background:#faf4f7;color:var(--plum);font-size:10.5px;text-transform:uppercase;letter-spacing:.4px}
+  td.c{text-align:center;white-space:nowrap}
+  .lead{font-size:13.5px}
+  .grid{display:flex;gap:20px;flex-wrap:wrap}.grid>div{flex:1;min-width:230px}
+  .fact{font-size:12.5px}.fact b{color:var(--plum)}
+  .callout{border-radius:10px;padding:12px 16px;margin-top:10px;font-size:12.5px;border:1px solid #f0dcc2;background:#fdf6ee}
+  .warn{border-color:#e7b7b7;background:#fdeeee}
+  .ok{border-color:#d8ecdf;background:#f4fbf6}
+  ul{margin:5px 0;padding-left:18px}li{margin:3px 0}
+  .box{color:var(--gold);font-weight:700;margin-right:4px}
+  .toolbar{max-width:860px;margin:0 auto;text-align:right}
+  .btn{background:var(--plum);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
+  footer{margin-top:18px;border-top:1px solid #eee;padding-top:10px;color:var(--muted);font-size:11px}
+  .pb{page-break-before:always}
+  @media print{body{background:#fff;font-size:12px}.toolbar{display:none}.page{box-shadow:none;margin:0;max-width:none;padding:0 4px;border-radius:0}h2{color:var(--plum)}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Print / Save as PDF</button></div>
+
+<!-- ============ PAGE 1 — COVER + SCOPE ============ -->
+<div class="page">
+  <header>
+    <div class="logo">L</div>
+    <div><h1>Installer Packet</h1>
+      <small>Lumi Nails &amp; Med Spa · Professional scope of work &amp; quote request</small></div>
+  </header>
+
+  <p class="lead">We're outfitting a new nail &amp; med spa with a smart-building control system. <b>The landlord is
+  running the low-voltage cabling, and the owner is installing all the smart devices herself</b> (cameras, sensors,
+  locks, lighting, hub, software). The <b>one job that needs a licensed pro is the front glass entry-door lock</b>
+  (fire-code egress) — that's the priority. A few other items below are optional add-ons if you carry them.</p>
+
+  <div class="grid">
+    <div class="fact">
+      <h3>Project</h3>
+      <b>Lumi Nails &amp; Med Spa</b><br>2111 S Wabash Ave<br>Chicago, IL 60616<br>
+      Storefront · nail salon + med spa
+    </div>
+    <div class="fact">
+      <h3>Contact</h3>
+      Leticia — Owner<br>info@luminailsandmedspa.com<br>
+      <span style="color:var(--muted)">Please reply with a site-visit time.</span>
+    </div>
+    <div class="fact">
+      <h3>Spaces (see floor plan)</h3>
+      Reception · Pedicure · Manicure<br>2 Treatment rooms · 2 Baths<br>Break room · Front + back entry
+    </div>
+  </div>
+
+  <h2>What we need you to quote</h2>
+  <table>
+    <tr><th style="width:60px">Priority</th><th>Scope item</th><th>Details</th></tr>
+    <tr><td class="c"><b>MAIN</b></td><td><b>Front glass entry door lock + buzz-in</b></td><td>Supply &amp; install a <b>code-compliant electric strike or maglock</b> with request-to-exit and <b>free emergency egress</b> (fail-safe / tied to fire alarm). Also wire it for <b>remote release (buzz-in)</b> so we can unlock the door from the front desk — and, if possible, trigger it from our app / video doorbell. See fire-code note below. <b>This is the main thing we need.</b></td></tr>
+    <tr><td class="c">Optional</td><td>Treatment-room locks (2)</td><td>Install 2 electronic door locks on the treatment rooms — if you'd rather do these than have us DIY them.</td></tr>
+    <tr><td class="c">Optional</td><td>Camera / NVR mounting</td><td>Landlord runs the cable; owner supplies the 7 cameras + NVR. Quote the <b>mounting + aiming + NVR setup</b> only, if you offer labor-only installs.</td></tr>
+    <tr><td class="c">Optional</td><td>Extras</td><td>Sirens, exterior sign relay, or terminating the equipment location — only if you carry that work.</td></tr>
+  </table>
+
+  <div class="callout ok"><b>Owner-supplied &amp; owner-installed — please DO NOT quote these:</b> the low-voltage cabling
+  (landlord is doing it), plus the control hub, lighting, thermostat, speakers, stick-on sensors, aromatherapy,
+  tablet, and the control software. We're handling all of that. Just quote the <b>front-door lock</b> (and any
+  optional items above you'd like to bid).</div>
+
+  <div class="callout warn"><b>⚠ Fire-code / egress — critical on the glass front door:</b> the entry lock must allow
+  <b>free egress at all times</b> (no key/tool to exit), <b>fail-safe on power loss</b>, and release on fire-alarm
+  activation. Must meet Chicago building &amp; life-safety code and ADA. Please confirm compliance and coordinate with
+  the landlord/base-building fire panel.</div>
+</div>
+
+<!-- ============ PAGE 2 — EQUIPMENT + QUOTE REQUEST ============ -->
+<div class="page pb">
+  <h2>Equipment involved (for the pro scope)</h2>
+  <p class="lead" style="margin-top:2px">Commercial-grade but <b>budget-conscious</b>. You may supply these or we can — please
+  itemize either way so we can compare. Suggest a cost-effective equal if you prefer a line you stock.</p>
+  <table>
+    <tr><th>Item</th><th class="c">Qty</th><th>Notes</th></tr>
+    <tr><td>IP PoE security cameras</td><td class="c">7</td><td>Turret/dome, ~4–5MP, night vision, commercial-grade budget tier (e.g. Reolink/Amcrest class)</td></tr>
+    <tr><td>NVR (network video recorder)</td><td class="c">1</td><td>8-channel+, PoE, sized for ~30-day retention</td></tr>
+    <tr><td>Front-door electric strike / maglock</td><td class="c">1</td><td>Fail-safe, with REX + power supply; fire-alarm interface</td></tr>
+    <tr><td>Treatment-room electronic locks</td><td class="c">2</td><td>Networkable / access-controlled</td></tr>
+    <tr><td>Cat6 cabling, connectors, mounts, conduit</td><td class="c">—</td><td>As needed for the runs above</td></tr>
+    <tr><td>Exterior sign relay wiring <span style="color:var(--muted)">(optional)</span></td><td class="c">—</td><td>Only if you carry signage/relay work</td></tr>
+  </table>
+
+  <h2>What to include in your quote</h2>
+  <ul>
+    <li><span class="box">1</span> <b>Itemize equipment vs. labor separately</b> (this is how we're comparing bids).</li>
+    <li><span class="box">2</span> Line items for each scope block (A–E) so we can pick and choose.</li>
+    <li><span class="box">3</span> Your <b>license #</b> and proof of insurance.</li>
+    <li><span class="box">4</span> Estimated <b>timeline</b> and how many on-site days.</li>
+    <li><span class="box">5</span> Any <b>permits</b> the door/egress work requires, and whether you pull them.</li>
+  </ul>
+
+  <h2>Site notes</h2>
+  <ul>
+    <li>Leased storefront — some work needs landlord sign-off (door hardware, fire-panel tie-in). We'll coordinate.</li>
+    <li>We'll walk the space with you on site so you can see the front door, the rooms, and the routing.</li>
+    <li>The smart-device side is already handled — you don't need to integrate software; just leave any gear you install on the network and labeled.</li>
+  </ul>
+
+  <div class="callout"><b>Device worksheet — fill in during the walkthrough:</b> for each camera and lock, note the
+  location, the model installed, and its IP/MAC. We'll use it to finish our side.</div>
+  <table>
+    <tr><th>Location</th><th>Device</th><th>Model</th><th>IP / MAC</th></tr>
+    <tr><td>Front entry</td><td>Camera + door lock</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Reception</td><td>Camera</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Retail</td><td>Camera</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Pedicure</td><td>Camera</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Manicure</td><td>Camera</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Treatment 1 / 2</td><td>Door locks (2)</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Back door</td><td>Camera</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Break room</td><td>Camera</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>NVR / equipment</td><td>NVR + PoE switch</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+  </table>
+
+  <footer>Lumi Nails &amp; Med Spa · 2111 S Wabash Ave, Chicago IL 60616 · info@luminailsandmedspa.com</footer>
+</div>
+</body>
+</html>

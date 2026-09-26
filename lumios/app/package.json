@@ -1,0 +1,16 @@
+{
+  "name": "lumios",
+  "version": "1.0.0",
+  "description": "LumiOS — smart-building control system for Lumi Nails & Med Spa (doors, lights, music, thermostats, cameras, scenes, voice).",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {},
+  "private": true
+}

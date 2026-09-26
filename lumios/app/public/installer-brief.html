@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumiOS — Smart-Building Installer Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--plum:#2b2018;--rose:#9a6f35;--gold:#c9a96e;--cream:#f8f4ee;--ink:#111111;--muted:#8a7f70;--ok:#6f9e7e}
+  *{box-sizing:border-box}
+  body{margin:0;background:#efe7ec;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  .sheet{max-width:880px;margin:24px auto;background:#fff;padding:38px 44px;box-shadow:0 6px 24px rgba(58,37,53,.14);border-radius:10px}
+  header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:16px;margin-bottom:18px}
+  .logo{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--rose),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:24px}
+  h1{margin:0;font-size:23px;color:var(--plum)}
+  header small{color:var(--muted)}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin:26px 0 10px}
+  p.lead{font-size:15px;color:#4a3a43}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  th,td{text-align:left;padding:7px 9px;border-bottom:1px solid #eee;vertical-align:top}
+  th{background:#faf4f7;color:var(--plum);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+  td.q{color:var(--ok);font-weight:700;white-space:nowrap}
+  .callout{background:#f4fbf6;border:1px solid #d8ecdf;border-radius:12px;padding:12px 16px;margin-top:8px;font-size:14px}
+  .warn{background:#fdf6ee;border:1px solid #f0dcc2}
+  ol li,ul li{margin:5px 0;font-size:14px}
+  .fill{display:inline-block;min-width:160px;border-bottom:1px solid #bb5;color:#bbb}
+  .toolbar{max-width:880px;margin:0 auto;text-align:right}
+  .btn{background:var(--plum);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
+  footer{margin-top:26px;border-top:1px solid #eee;padding-top:12px;color:var(--muted);font-size:12px}
+  code{background:#f4eef1;padding:1px 5px;border-radius:5px;font-size:12.5px}
+  @media print{body{background:#fff}.toolbar{display:none}.sheet{box-shadow:none;margin:0;max-width:none;padding:0 6px;border-radius:0}h2{color:var(--plum)}.pagebreak{page-break-before:always}}
+  body{font-family:'Jost',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Print / Save as PDF</button></div>
+<div class="sheet">
+  <header>
+    <div class="logo">L</div>
+    <div><h1>Smart-Building Installer Brief</h1>
+      <small>Lumi Nails &amp; Med Spa — work order for hardware + LumiOS hookup</small></div>
+  </header>
+
+  <p class="lead"><b>The control software (LumiOS) is already built and running.</b> This brief is the
+  hardware to install and how to connect it. LumiOS uses open standards (Matter / Zigbee / Z-Wave /
+  ONVIF), so the owner is not tied to any one brand or installer. Please quote <b>install + integration</b>.
+  Product suggestions are examples — equivalent reputable models are fine if they meet the "must support" note.</p>
+
+  <h2>1 · The hub (install first)</h2>
+  <div class="callout"><b>Home Assistant Green</b> (~$99) — recommended, because LumiOS's hardware
+  driver is already written for Home Assistant. It runs <b>locally</b> (doors &amp; lights keep working
+  if the internet drops) and speaks Matter/Thread, Zigbee and (with a USB stick) Z-Wave.
+  Alternatives: Hubitat Elevation C-8 Pro (~$179) or Homey Pro. Put it on wired Ethernet.
+  <br><br><b>LumiOS itself</b> runs on its own small always-on device (a ~$100–150 mini-PC or Raspberry Pi)
+  on the same network — <i>not</i> on the hub appliance. Both stay on-site.</div>
+
+  <div class="callout"><b>Site notes (per plans — Wallin Gomez A10 / A40, 2111 S Wabash Ave):</b>
+  Mount the <b>hub, UPS &amp; LumiOS PC by the existing electric panel</b> (corridor side). <b>One HVAC zone</b> —
+  the smart thermostat replaces the existing thermostat (center of suite). <b>3 keyless doors</b> per door
+  schedule A40: <b>Door 01</b> glass entry (Reception), <b>Doors 02 &amp; 03</b> (Treatment 104 &amp; 105) — all
+  "coordinate hardware with tenant." <b>8 shades</b> on the Reception/Pedicure glazed partitions. <b>No cameras</b>
+  in Treatment 104/105 or Restrooms 107/109.</div>
+
+  <h2>2 · Hardware shopping list</h2>
+  <table>
+    <tr><th>What</th><th>Suggested (or equivalent)</th><th>Qty</th><th>~ Each</th><th>Must support</th></tr>
+    <tr><td>On-site hub</td><td>Home Assistant Green</td><td class="q">1</td><td>$99</td><td>Local API, Matter/Zigbee/Z-Wave</td></tr>
+    <tr><td>LumiOS host</td><td>Small always-on mini-PC or Raspberry Pi (runs the LumiOS app)</td><td class="q">1</td><td>$100–150</td><td>Runs Node.js, wired Ethernet</td></tr>
+    <tr><td>Entry smart locks (front &amp; back)</td><td>Schlage or Yale (Z-Wave) — or electric strike + Z-Wave relay for a glass/commercial door</td><td class="q">2</td><td>$200–300</td><td><b>Physical key override</b>, defined fail-safe</td></tr>
+    <tr><td>Room-access locks + door sensors</td><td>Electronic strike or smart lock + contact sensor on each treatment room</td><td class="q">2</td><td>$120–250</td><td>Per-room lock + open/closed status</td></tr>
+    <tr><td>Smart lighting (per zone)</td><td>Tunable-white + color (RGB) bulbs — Philips Hue; or Lutron switches + Hue in color rooms</td><td class="q">~8 zones</td><td>$50–90</td><td><b>Color temp (Kelvin) + RGB + dimming</b></td></tr>
+    <tr><td>Motion / occupancy sensors</td><td>Aqara or Hue motion sensors (bathrooms, break room, back)</td><td class="q">~4</td><td>$25–80</td><td>Occupancy events for auto-lighting</td></tr>
+    <tr><td>Thermostat</td><td>Honeywell T6 Pro Z-Wave (replaces the existing thermostat)</td><td class="q">1</td><td>$90–170</td><td>Local; single HVAC zone per plans</td></tr>
+    <tr><td>Motorized shades</td><td><b>Hunter Douglas PowerView Gen 3</b> (owner orders through an HD dealer; dealer measures &amp; installs)</td><td class="q">~8</td><td>$350–600 ea</td><td>Gen 3 motorization</td></tr>
+    <tr><td>PowerView <b>Gen 3 Gateway</b></td><td>Required for LumiOS shade control — exposes the local API. <b>Reserve its IP</b> in the router.</td><td class="q">1</td><td>~$200</td><td><b>Gen 3 API only</b> (not Gen 2)</td></tr>
+    <tr><td>Multi-room audio (sound zones)</td><td>Sonos speakers per area, or Sonos Amp + in-ceiling speakers for grouped zones</td><td class="q">by area</td><td>$250–700</td><td>Grouped zones, per-zone volume, API</td></tr>
+    <tr><td>AI cameras + NVR</td><td>Reolink or Amcrest AI PoE cameras (person detection) + ONVIF NVR</td><td class="q">7 + NVR</td><td>$500–800 kit</td><td><b>ONVIF + RTSP, AI person detection</b>, local rec</td></tr>
+    <tr><td>Exterior signage</td><td>Smart relay/plug for the lit sign + programmable LED "Open/Closed" sign (or small digital display for promos)</td><td class="q">1–2</td><td>$60–300</td><td>On/off + message control via API/relay</td></tr>
+    <tr><td>Autoclave monitor</td><td>Smart plug with energy monitoring (senses on/off &amp; cycles)</td><td class="q">1</td><td>$20–40</td><td>Reports uptime to LumiOS</td></tr>
+    <tr><td>Front-desk tablet</td><td>iPad / Android on wall mount</td><td class="q">1</td><td>$200–400</td><td>Salon Wi-Fi</td></tr>
+    <tr><td>Network &amp; power</td><td>PoE switch + UPS battery backup (APC/CyberPower)</td><td class="q">1 ea</td><td>$100–200</td><td>UPS carries hub+locks+network</td></tr>
+    <tr><td>Keyless entry — 3 zones</td><td>Yale Assure Lock 2 Touchscreen/keypad (Z-Wave) or Schlage Encode keypad</td><td class="q">3</td><td>$200–260</td><td>Keypad codes + key override</td></tr>
+    <tr><td>Video intercom</td><td>Reolink or 2N video doorbell at the entrance (2-way audio)</td><td class="q">1</td><td>$100–300</td><td>ONVIF/local, 2-way audio</td></tr>
+    <tr><td>Alarm sirens</td><td>Aeotec Siren 6 (Z-Wave) — indoor + outdoor</td><td class="q">2</td><td>$65 ea</td><td>Triggered by LumiOS security panel</td></tr>
+    <tr><td><b>Smoke + CO detectors</b></td><td>First Alert ZCOMBO (Z-Wave) — <b>supplements</b> the code system</td><td class="q">2–3</td><td>$40 ea</td><td>Alerts to LumiOS + auto-unlock egress</td></tr>
+    <tr><td>Phone system</td><td>Ooma Office (VoIP) or Grandstream/Yealink + SIP service <i>(monthly fee)</i></td><td class="q">1 + phones</td><td>$100 + svc</td><td>Salon phone — separate from LumiOS</td></tr>
+  </table>
+  <p style="font-size:12px;color:var(--muted)">Prices approximate (mid-2026) — verify at purchase. Rooms at Lumi: Reception, Pedicure, Manicure, Treatment Room 1 &amp; 2, Bathroom 1 &amp; 2, Break Room. Cameras cover common areas + entrances only (none in treatment rooms or bathrooms).</p>
+
+  <div class="callout warn"><b>Phased option (recommended):</b> start with <b>Hub + entry locks + smart lighting</b>
+  (~$1,200–2,000 installed), confirm it all works in LumiOS, then add thermostat, shades, audio, AI cameras,
+  room-access locks, signage and the autoclave monitor. A full build of <i>everything</i> typically lands
+  ~$4,500–9,000 in hardware depending on speaker, shade and camera count.</div>
+
+  <h2>3 · Installer scope of work</h2>
+  <div class="callout"><b>What we're asking you to quote.</b> The owner supplies the gear and handles the
+  DIY/handyman items — <b>please quote the licensed-pro work + the integration only</b>, itemized:
+  <ul style="margin:6px 0 0">
+    <li><b>Owner / handyman (not in your quote):</b> hub, bulbs, sensors, Sonos, plugs, tablet; mounting the
+      WiFi cameras + NVR, the battery/plug-in shades, and the video doorbell.</li>
+    <li><b>Licensed pro — your quote:</b> the <b>glass-door electric strike + keypad</b> (Door 01), the two
+      treatment-room locks (Doors 02/03), the <b>thermostat</b> wiring, <b>sirens/alarm tie-in</b>, and the
+      <b>exterior-sign relay wiring</b> — all to fire/egress code.</li>
+    <li><b>Integration:</b> pair everything to Home Assistant, create the access token, confirm camera RTSP,
+      and the small automations that feed sensors/AI to LumiOS.</li>
+  </ul></div>
+  <ol>
+    <li>Install/terminate the <b>licensed-pro</b> items above (electrician / low-voltage / locksmith as required).</li>
+    <li>Pair every device to the Home Assistant hub; confirm each responds in the hub's own app.</li>
+    <li>Record each device's <b>entity ID</b> in the worksheet below (LumiOS needs these).</li>
+    <li>Create a Home Assistant <b>Long-Lived Access Token</b> for LumiOS.</li>
+    <li>Confirm camera <b>RTSP URLs</b> and that the NVR records locally.</li>
+  </ol>
+  <div class="callout warn"><b>Cameras need one extra piece for in-app live view.</b> LumiOS controls
+  everything else directly, but to show real camera video <i>inside</i> the app you also need a small
+  RTSP→WebRTC/HLS relay (e.g. <code>go2rtc</code> or Frigate, both run on the hub/host). Without it, recording
+  and ONVIF motion still work — you just view footage in the NVR/camera app, not the LumiOS tiles.</div>
+
+  <h2>4 · Connect LumiOS (developer step — ~a few hours)</h2>
+  <div class="callout warn"><b>Who does this:</b> this step edits a Node.js file, so it needs someone
+  comfortable with code — many device installers pair hardware but don't program. Use a technical
+  integrator, or have the LumiOS provider pre-fill <code>realDriver.js</code> so the installer only pastes IDs.</div>
+  <ol>
+    <li>Open <code>src/devices/drivers/realDriver.js</code> — the code for each action is pre-written (commented).</li>
+    <li>Paste the entity IDs from the worksheet into the <code>MAP</code>, uncomment the <code>hub()</code> calls, remove the <code>NOT_WIRED</code> guards.</li>
+    <li>Launch with <code>LUMIOS_DRIVER=real</code>, <code>LUMIOS_HUB_URL</code>, <code>LUMIOS_HUB_TOKEN</code> set (see <code>docs/SETUP.md</code>).</li>
+    <li><b>Test one light first</b>, then doors. The app, voice and scenes do not change.</li>
+  </ol>
+
+  <div class="pagebreak"></div>
+  <h2>5 · Device-ID worksheet (installer fills in)</h2>
+  <table>
+    <tr><th>LumiOS device</th><th>Type</th><th>Hub entity ID (fill in)</th></tr>
+    <tr><td>Front Entrance</td><td>entry lock</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Back Door</td><td>entry lock</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Reception</td><td>light (tunable+RGB) / shade / thermostat / speaker</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Pedicure</td><td>light (tunable+RGB) / shade / thermostat / speaker</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Manicure</td><td>light (tunable+RGB) / shade / thermostat / speaker</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Treatment Room 1</td><td>light / shade / thermostat / speaker / <b>room lock + sensor</b></td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Treatment Room 2</td><td>light / shade / thermostat / speaker / <b>room lock + sensor</b></td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Bathroom 1 &amp; 2</td><td>light / <b>motion sensor</b></td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Break Room</td><td>light / shade / thermostat / <b>motion sensor</b> / camera</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>7 AI cameras</td><td>RTSP URL + AI person-detection per cam (entry, reception, retail, pedicure, manicure, back, break)</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Exterior Sign / Open-Closed / Promo</td><td>relay-switch + sign/display</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Autoclave</td><td>smart plug (energy monitor)</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>3 keyless-entry doors</td><td>keypad lock entity per door</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Alarm siren</td><td>switch/relay entity</td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Smoke + CO detectors</td><td>binary_sensor per detector → automation to LumiOS <code>/api/safety/test</code></td><td class="fill">&nbsp;</td></tr>
+    <tr><td>Video intercom</td><td>doorbell entity + RTSP</td><td class="fill">&nbsp;</td></tr>
+  </table>
+
+  <h2>6 · Safety must-haves (sign off before go-live)</h2>
+  <div class="callout warn" style="border-color:#e7b7b7;background:#fdeeee">
+    <b>⚠️ Door locks are a fire-code / life-safety matter — not just a gadget.</b> On a commercial building,
+    exit doors must let people <b>out</b> during an emergency, and electric strikes/maglocks typically must
+    <b>release automatically on a fire alarm</b> (fail-safe egress). This must be designed and signed off by a
+    <b>licensed locksmith/electrician</b> to be legal and insurable. Confirm your <b>insurance</b> and local
+    <b>fire/building codes</b> before automating any entrance or exit. Do not improvise locking on egress doors.
+  </div>
+  <ul>
+    <li>☐ Exit/egress doors comply with <b>fire code</b> (release on alarm) — signed off by a licensed pro.</li>
+    <li>☐ Every smart lock has a working <b>physical key override</b>.</li>
+    <li>☐ Defined <b>fail-safe</b> on power/network loss (doors must not leave the salon unsecured or staff trapped).</li>
+    <li>☐ <b>UPS</b> backs up hub, network and door controllers.</li>
+    <li>☐ LumiOS served over <b>HTTPS</b>; owner <b>2-factor</b> sign-in enabled; demo PINs/passwords changed.</li>
+    <li>☐ Camera footage stored <b>locally</b> (no forced cloud subscription).</li>
+    <li>☐ <b>Smoke/CO:</b> code-required hardwired/monitored system installed by a licensed pro — the smart detectors are <b>supplemental alerts only</b>, not a replacement.</li>
+    <li>☐ Someone owns <b>upkeep</b>: keep the LumiOS host on, apply updates, and <b>back up the <code>data/</code> folder</b> (users, PINs, scenes, alert keys).</li>
+  </ul>
+
+  <p style="font-size:12.5px;color:var(--muted)"><b>Note on cost:</b> the shopping list is <b>hardware only</b>.
+  Installation labor (electrician + integrator) and the LumiOS connection step are separate — get them quoted too.</p>
+
+  <footer>Owner: Lumi Nails &amp; Med Spa · Control software: LumiOS (already provided) · Installer: <span class="fill">&nbsp;</span> · Date: <span class="fill">&nbsp;</span></footer>
+</div>
+</body>
+</html>

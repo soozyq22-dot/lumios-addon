@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumiOS Admin — Lumi Nails &amp; Med Spa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .admin-grid{display:grid;gap:16px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:9px 8px;border-top:1px solid #f0e7ec}
+  th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+  input,select{padding:9px;border:1px solid #e3d7de;border-radius:10px;font-size:14px;background:#fff}
+  .form-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .form-row input,.form-row select{flex:1;min-width:90px}
+  textarea{width:100%;min-height:120px;font-family:ui-monospace,Menlo,monospace;font-size:12px;border:1px solid #e3d7de;border-radius:10px;padding:10px}
+  .danger{background:var(--bad);color:#fff}
+  .muted{color:var(--muted);font-size:13px}
+  .back{color:var(--rose-soft);text-decoration:none;font-size:14px}
+  .sched-edit{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px solid #f0e7ec}
+  .builder-head{font-size:13px;margin:6px 0 4px}
+  .action-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px;border:1px solid #f0e7ec;border-radius:12px;margin-bottom:8px;background:#fbf7f9}
+  .action-row .ar-params{display:flex;gap:6px;align-items:center;flex-wrap:wrap;flex:1;font-size:13px;color:var(--muted)}
+  .day-chips{display:flex;gap:3px}
+  .day{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:#f0e7ec;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;user-select:none}
+  .day.on{background:var(--ok);color:#fff}
+  .day input{display:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">L</div>
+    <div><h1>LumiOS Admin</h1><small>Lumi Nails &amp; Med Spa</small></div></div>
+  <div class="head-right" style="display:flex;gap:16px">
+    <a class="back" href="staff-card.html" target="_blank">📋 Staff card</a>
+    <a class="back" href="install-app.html" target="_blank">📲 Install guide</a>
+    <a class="back" href="remote-access.html" target="_blank">🌐 Remote access</a>
+    <a class="back" href="installer-packet.pdf" target="_blank">📄 Installer packet (PDF)</a>
+    <a class="back" href="placement-plan.png" target="_blank">🗺️ Placement plan</a>
+    <a class="back" href="shopping-list.html" target="_blank">📦 Shopping list</a>
+    <a class="back" href="installer-brief.html" target="_blank">🔧 Installer brief</a>
+    <a class="back" href="quote-compare.html" target="_blank">⚖️ Quote compare</a>
+    <a class="back" href="compare.html" target="_blank">🖨️ Comparison sheet</a>
+    <a class="back" href="index.html">← Back to control</a>
+  </div>
+</header>
+
+<main id="main" style="display:none">
+  <div class="admin-grid">
+
+    <div id="usersCard" class="card">
+      <div class="section-title" style="margin-top:0">Users &amp; Permissions</div>
+      <table id="usersTbl"></table>
+      <div class="form-row">
+        <input id="u_username" placeholder="username">
+        <input id="u_name" placeholder="Full name">
+        <select id="u_role"><option value="guest">Guest / Limited</option><option value="staff">Staff</option><option value="manager">Manager</option><option value="owner">Owner</option></select>
+        <input id="u_zones" placeholder="zones e.g. room1,room2">
+        <input id="u_locs" placeholder="locations e.g. main,downtown">
+        <input id="u_pw" placeholder="password">
+        <input id="u_pin" placeholder="PIN" maxlength="4">
+        <button class="btn btn-primary" style="flex:0 0 auto;width:auto" onclick="addUser()">Add user</button>
+      </div>
+      <p class="muted">Tip: change the demo owner/manager/staff passwords &amp; PINs here first thing.</p>
+    </div>
+
+    <div class="card" id="locsCard">
+      <div class="section-title" style="margin-top:0">Locations</div>
+      <table id="locsTbl"></table>
+      <div class="form-row">
+        <input id="loc_id" placeholder="id (e.g. downtown)">
+        <input id="loc_name" placeholder="Display name">
+        <button class="btn btn-primary" style="flex:0 0 auto;width:auto" onclick="addLocation()">Add location</button>
+      </div>
+      <p class="muted">Each location has its own zones, doors, cameras and security. Switch between them with the 📍 menu on the main screen. Zone editing below applies to the <b>main</b> location.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-title" style="margin-top:0">Zones <span class="muted" style="text-transform:none;letter-spacing:0">— main location</span></div>
+      <table id="zonesTbl"></table>
+      <div class="form-row">
+        <input id="z_id" placeholder="id (e.g. room3)">
+        <input id="z_name" placeholder="Display name">
+        <input id="z_emoji" placeholder="emoji" maxlength="4" style="max-width:80px">
+        <button class="btn btn-primary" style="flex:0 0 auto;width:auto" onclick="addZone()">Add zone</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" style="margin-top:0">Sound Zones</div>
+      <div id="audioEdit"></div>
+      <div class="form-row">
+        <input id="ag_name" placeholder="Group name (e.g. Retail)">
+        <input id="ag_zones" placeholder="room ids e.g. reception,pedicure">
+        <button class="btn btn-primary" style="flex:0 0 auto;width:auto" onclick="addAudioGroup()">Add group</button>
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px" onclick="saveAudioGroups()">Save sound zones</button>
+      <p class="muted">Each sound zone plays its own music/volume. Room ids: reception, pedicure, manicure, room1, room2, break.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-title" style="margin-top:0">Scene Builder</div>
+      <div class="form-row">
+        <select id="sceneSel" onchange="loadScene()" style="flex:2"></select>
+        <button class="btn btn-ghost" style="flex:0 0 auto;width:auto" onclick="newScene()">+ New scene</button>
+        <button class="btn danger" style="flex:0 0 auto;width:auto" onclick="deleteScene()">Delete</button>
+      </div>
+      <div class="form-row">
+        <input id="sc_name" placeholder="Scene name">
+        <input id="sc_emoji" placeholder="emoji" maxlength="4" style="max-width:80px">
+        <input id="sc_desc" placeholder="Short description" style="flex:2">
+        <label class="muted" style="flex:0 0 auto"><input type="checkbox" id="sc_perroom"> per-room</label>
+      </div>
+      <div class="builder-head muted">What this scene does — add a step for each device:</div>
+      <div id="actionList"></div>
+      <div class="form-row">
+        <button class="btn btn-ghost" style="flex:0 0 auto;width:auto" onclick="addActionRow()">+ Add step</button>
+        <button class="btn btn-primary" style="flex:0 0 auto;width:auto" onclick="saveSceneBuilt()">Save scene</button>
+      </div>
+      <details style="margin-top:12px"><summary class="muted" style="cursor:pointer">Advanced: view raw JSON</summary>
+        <textarea id="sceneJson" spellcheck="false" readonly style="margin-top:8px"></textarea></details>
+    </div>
+
+    <div class="card">
+      <div class="section-title" style="margin-top:0">Schedules &amp; Triggers</div>
+      <div id="schedEdit"></div>
+      <div class="form-row">
+        <input id="sc_time" type="time" value="09:00">
+        <select id="sc_scene"></select>
+        <select id="sc_loc" title="Location"></select>
+        <input id="sc_label" placeholder="Label">
+        <button class="btn btn-primary" style="flex:0 0 auto;width:auto" onclick="addSchedule()">Add schedule</button>
+      </div>
+      <button class="btn btn-primary" style="margin-top:12px" onclick="saveAutomation()">Save all schedules</button>
+    </div>
+
+  </div>
+</main>
+
+<div class="overlay" id="gate"><div class="login"><div class="logo">L</div><h2>Admin sign-in required</h2>
+  <p>Sign in from the main screen with an Owner or Manager account.</p>
+  <a class="btn-primary" href="index.html" style="text-decoration:none;display:block;padding:13px">Go to sign-in</a></div></div>
+
+<div class="toast" id="toast"></div>
+<script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumiOS — Your DIY Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--plum:#2b2018;--rose:#9a6f35;--gold:#c9a96e;--cream:#f8f4ee;--ink:#141414;--muted:#8a7f70;--ok:#6f9e7e;--line:#ece4d7}
+  *{box-sizing:border-box}
+  body{margin:0;background:#efe7ec;color:var(--ink);font-family:'Jost',-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.42;font-size:13px}
+  .sheet{max-width:940px;margin:20px auto;background:#fff;padding:32px 42px;box-shadow:0 6px 24px rgba(43,32,24,.14);border-radius:10px}
+  header{display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--gold);padding-bottom:12px;margin-bottom:10px}
+  .logo{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--gold),var(--rose));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:23px}
+  h1{margin:0;font-size:22px;color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-weight:600}
+  header small{color:var(--muted)}
+  .tip{background:#f4fbf6;border:1px solid #d8ecdf;border-radius:10px;padding:10px 14px;margin:8px 0;font-size:12.5px}
+  .warn{background:#fdeeee;border-color:#e7b7b7}
+  .cols{display:flex;gap:22px;flex-wrap:wrap}.col{flex:1;min-width:330px}
+  .step{border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:10px}
+  .step h2{margin:0 0 5px;font-size:15px;color:var(--plum);font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;display:flex;align-items:center;gap:7px}
+  .t{margin-left:auto;font-size:10.5px;color:var(--muted);font-family:'Jost';font-weight:500;white-space:nowrap}
+  .step ul{margin:3px 0;padding-left:16px}.step li{margin:3px 0;font-size:12.5px}
+  .box{color:var(--gold);font-weight:700;margin-right:3px}
+  .gear{margin-top:7px;padding-top:6px;border-top:1px dashed var(--line);font-size:11.7px;color:#4a423a}
+  .gear b{color:var(--plum);text-transform:uppercase;letter-spacing:.4px;font-size:9.5px}
+  .gear a{color:var(--rose);text-decoration:none;white-space:nowrap}.gear a:hover{text-decoration:underline}
+  .toolbar{max-width:940px;margin:0 auto;text-align:right}
+  .btn{background:var(--plum);color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer}
+  footer{margin-top:14px;border-top:1px solid #eee;padding-top:10px;color:var(--muted);font-size:11px}
+  @media print{body{background:#fff;font-size:12px}.toolbar{display:none}.sheet{box-shadow:none;margin:0;max-width:none;padding:0 4px;border-radius:0}h2{color:var(--plum)!important}.gear a{color:#333}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Print / Save as PDF</button></div>
+<div class="sheet">
+  <header>
+    <div class="logo">L</div>
+    <div><h1>Your DIY Plan</h1>
+      <small>Lumi Nails &amp; Med Spa · everything you install yourself — links go straight to each product</small></div>
+  </header>
+
+  <div class="tip"><b>The setup:</b> your <b>landlord runs all the cabling</b> — give their crew your <b>floor plan</b> so the wires
+  come out where each camera and lock goes. <b>You mount and set up the devices.</b> Most is plug-in; the lighting dimmers and door locks
+  are a screwdriver-level swap. Do the steps <b>in order</b>.</div>
+  <div class="tip warn"><b>The one thing to leave to a pro:</b> the <b>front glass entry door lock</b> — life-safety / fire-code
+  (free exit, fail-safe on power loss, fire-alarm tie-in). That's the licensed locksmith you emailed. <b>Don't DIY that one.</b>
+  Want fingerprint entry up front too? Ask them to wire a <b>fingerprint reader</b> into the door's access control.</div>
+
+  <div class="cols">
+    <div class="col">
+      <div class="step">
+        <h2>0 · Internet &amp; network <span class="t">do first</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Order <b>business internet</b> (Comcast Business / AT&amp;T Fiber) — <b>everything</b> rides on this.</li>
+          <li><span class="box">☐</span> Set up <b>mesh WiFi</b> for whole-spa coverage — Sonos, tablet, doorbell &amp; the shade Gateway all need it.</li>
+          <li><span class="box">☐</span> Put a small <b>Ethernet switch</b> in the equipment closet — the hub, mini-PC, NVR &amp; Gateway each need a wired port.</li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp;
+          <a href="https://www.amazon.com/Mesh-Wifi-6-Router-System/dp/B085Z35GY6" target="_blank">TP-Link Deco X20 mesh WiFi (3-pack)</a> ·
+          <a href="https://www.amazon.com/TP-Link-Gigabit-Ethernet-Network-Switch/dp/B00A121WN6" target="_blank">TP-Link TL-SG108 8-port switch</a> ·
+          <span style="color:var(--muted)">+ business internet from your ISP</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2>1 · Set up the brain <span class="t">~30 min</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Plug the <b>hub</b> into your router (ethernet). Insert the <b>Zigbee</b> + <b>Z-Wave</b> USB radios (use the extension cable so they don't interfere).</li>
+          <li><span class="box">☐</span> Plug in the <b>mini-PC</b>; plug <b>both</b> into the <b>battery backup</b>.</li>
+          <li><span class="box">☐</span> In your router, <b>reserve an IP</b> for the hub + mini-PC. Write them down.</li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp;
+          <a href="https://www.home-assistant.io/green/" target="_blank">HA Green hub</a> ·
+          <a href="https://www.home-assistant.io/connectzbt1/" target="_blank">Connect ZBT-1 (Zigbee)</a> ·
+          <a href="https://www.amazon.com/Z-Wave-ZST39-Assistant-HomeSeer-Software/dp/B0BW171KP3" target="_blank">Zooz ZST39 (Z-Wave)</a> ·
+          <a href="https://www.amazon.com/Beelink-Intel-N100-Computer-Desktop-Display/dp/B0BVFS94J5" target="_blank">Beelink N100 PC</a> ·
+          <a href="https://www.amazon.com/CyberPower-CP1500PFCLCD-Sinewave-Outlets-Mini-Tower/dp/B00429N19W" target="_blank">CyberPower UPS</a>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2>2 · Install LumiOS <span class="t">~20 min</span></h2>
+        <ul>
+          <li><span class="box">☐</span> On the mini-PC install <b>Node.js</b> (LTS), copy the <b>LumiOS folder</b> over, run <b>node server.js</b>.</li>
+          <li><span class="box">☐</span> Open it from any tablet at <b>http://[mini-PC IP]:3000</b>. Ask me to set <b>auto-start on boot</b>.</li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp; <a href="https://nodejs.org/en/download" target="_blank">Node.js (free)</a> · LumiOS folder (you have it)</div>
+      </div>
+
+      <div class="step">
+        <h2>3 · Lighting (recessed) — smart dimmer <span class="t">~30 min/switch</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Your recessed lights are already wired to <b>wall switches</b>. To make them smart, replace each switch that runs recessed lights with a <b>smart dimmer</b>.</li>
+          <li><span class="box">☐</span> Switch swap: turn <b>OFF the breaker</b>, remove the old switch, wire in the dimmer (line / load / neutral / ground). Not comfortable in the box? 15-min job for a handyman.</li>
+          <li><span class="box">☐</span> Pair to your hub — Zooz uses your Z-Wave stick (no extra hub); Lutron uses its own bridge. Now LumiOS dims each room.</li>
+          <li><i>Dimmer = on/off + smooth dimming. Want warm-to-cool "tunable" scenes? That needs tunable trims — ask me.</i></li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp;
+          <a href="https://www.getzooz.com/zooz-zen72-dimmer/" target="_blank">Zooz ZEN72 (best value, Z-Wave)</a> ·
+          <a href="https://www.amazon.com/Lutron-Wireless-Lighting-P-BDG-PKG1W-Assistant/dp/B00MXCRAX8" target="_blank">Lutron Caséta kit (best dimming)</a>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2>4 · Thermostat — landlord's (nothing to buy) <span class="t">—</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Your landlord is installing a <b>Trane BAYSTAT152A</b> commercial thermostat. It runs the HVAC and works on its own — but it's proprietary, so it <b>won't connect to LumiOS.</b> That's fine.</li>
+          <li><span class="box">☐</span> <b>Skip the smart thermostat.</b> LumiOS will still <b>show</b> each room's temp via the Aqara temp sensors (Step 6); you set the temperature on the wall unit.</li>
+          <li><i>Want room temps shown in the app? Add 2–3 more Aqara temp sensors. Full climate control later would mean asking your HVAC tech if the system is swappable — don't swap the landlord's stat without checking.</i></li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp; Landlord provides the thermostat — nothing to buy here.</div>
+      </div>
+
+      <div class="step">
+        <h2>5 · Cameras + NVR + doorbell <span class="t">~2–3 hrs</span></h2>
+        <ul>
+          <li><span class="box">☐</span> The NVR has <b>8 PoE ports</b>, so plan <b>8 devices</b>: <b>6 regular cameras + 1 wide Duo camera + the doorbell</b>. Put the <b>Duo (wide-view)</b> camera in your biggest open room.</li>
+          <li><span class="box">☐</span> Landlord's cable comes out at each spot. Screw the bracket up, clip the camera on, aim it, connect the cable.</li>
+          <li><span class="box">☐</span> Plug every camera + the doorbell into the <b>NVR's PoE ports</b> (the NVR powers them). The bundle includes a <b>2TB drive</b> — recording's ready.</li>
+          <li><span class="box">☐</span> Plug the NVR into your router, set <b>recording + ~30-day retention</b>, name each camera by room.</li>
+          <li><span class="box">☐</span> Mount the <b>video doorbell</b> at the front door — see &amp; talk to visitors in Lumi.</li>
+          <li><span class="box">☐</span> Add the <b>NVR / cameras / doorbell</b> to Home Assistant (Reolink integration).</li>
+          <li><i>The "buzz them in" part is the <b>locksmith's job</b> — they wire the door so you can unlock it from the front desk / app.</i></li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp;
+          <a href="https://reolink.com/product/nvr-duo-3v-poe/" target="_blank">Reolink NVR Duo 3v bundle (NVR + 2TB drive + wide Duo cam)</a> ·
+          <a href="https://reolink.com/product/rlc-811a/" target="_blank">Reolink RLC-811A cam — 4K + 5× zoom (×6)</a> ·
+          <a href="https://reolink.com/product/reolink-video-doorbell-poe/" target="_blank">Reolink Video Doorbell (PoE)</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="step">
+        <h2>6 · Sensors <span class="t">~30 min</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Peel-and-stick <b>motion</b> sensors in room corners, <b>door</b> sensors on door+frame, and a <b>temp sensor</b> inside the med fridge.</li>
+          <li><span class="box">☐</span> Pair each straight to your <b>Zigbee radio</b> in Home Assistant. No separate Aqara hub needed.</li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp;
+          <a href="https://www.amazon.com/Aqara-Configurable-Detection-Automations-Compatible/dp/B0B9XZ1D51" target="_blank">Aqara Motion P1 (×4)</a> ·
+          <a href="https://www.amazon.com/Aqara-MCCGQ11LM-Window-Sensor-White/dp/B07D37VDM3" target="_blank">Aqara Door/Window (×2)</a> ·
+          <a href="https://www.amazon.com/Aqara-WSDCGQ11LM-Temperature-Humidity-Sensor/dp/B07D37FKGY" target="_blank">Aqara Temp (×1)</a>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2>7 · Music <span class="t">~30 min</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Set up the <b>Sonos</b> speakers (one per zone) in the Sonos app; add the <b>Sonos</b> integration in Home Assistant.</li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp; <a href="https://www.sonos.com/en-us/shop/era-100" target="_blank">Sonos Era 100 (×4)</a></div>
+      </div>
+
+      <div class="step">
+        <h2>8 · Scent + reception display <span class="t">~20 min</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Plug the <b>diffusers</b> into <b>smart plugs</b>; plug in the <b>reception display</b>; add the plugs to the hub.</li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp;
+          <a href="https://www.amazon.com/Kasa-Smart-Monitoring-Compact-Certified/dp/B0BYGMR4DX" target="_blank">Kasa Smart Plugs</a> ·
+          <a href="https://www.amazon.com/s?k=smart+wifi+aromatherapy+diffuser" target="_blank">Diffuser (pick your style)</a> ·
+          <a href="https://www.amazon.com/s?k=24+inch+monitor" target="_blank">Display (any 24″ monitor/TV)</a>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2>9 · Treatment-room fingerprint locks <span class="t">~45 min</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Install a <b>fingerprint smart lock</b> on each of the <b>2 treatment-room</b> doors (standard door — screwdriver job).</li>
+          <li><span class="box">☐</span> <b>Enroll each staff member's fingerprint</b>, then pair the lock to the hub so entries log in LumiOS.</li>
+          <li><i>Deadbolt-style. Lever-only doors? A locksmith adds the bore fast — or roll these into their quote with the front door.</i></li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp;
+          <a href="https://u-tec.com/products/ultraloq-u-bolt-pro-series" target="_blank">Ultraloq U-Bolt Pro (fingerprint) ×2</a> ·
+          <span style="color:var(--muted)">alt:</span> <a href="https://www.amazon.com/Aqara-Fingerprint-Touchscreen-Electronic-Weatherproof/dp/B0BZSD2L1W" target="_blank">Aqara U100</a>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2>10 · Front-desk tablet <span class="t">~15 min</span></h2>
+        <ul>
+          <li><span class="box">☐</span> Mount it, open LumiOS, <b>"Add to Home Screen."</b> In <b>Admin</b>, set everyone's <b>PINs</b> + roles.</li>
+        </ul>
+        <div class="gear"><b>Gear</b> &nbsp;
+          <a href="https://www.amazon.com/Lenovo-128GB-Tablet-MediaTek-Android/dp/B0BCLSDTZ7" target="_blank">Lenovo Tab M10 Plus</a> ·
+          <a href="https://www.amazon.com/s?k=tablet+wall+mount+holder" target="_blank">Wall mount</a>
+        </div>
+      </div>
+
+      <div class="step warn">
+        <h2>11 · Connect LumiOS to it all <span class="t">~1 hr</span></h2>
+        <ul>
+          <li><span class="box">☐</span> In Home Assistant make a <b>Long-Lived Access Token</b>; in LumiOS config set driver to <b>"real"</b> + paste the token.</li>
+          <li><span class="box">☐</span> Match each device to its HA name (code is <b>pre-written</b>). Test <b>one light</b>, then <b>one door</b> → live.</li>
+          <li><i>The only techy step — hand it to a tech friend if you'd rather.</i></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer><b>Not your job:</b> running the cabling (landlord) · the front glass-door fire-code lock (licensed locksmith) · the Hunter Douglas shades (HD dealer). · Lumi Nails &amp; Med Spa · LumiOS</footer>
+</div>
+</body>
+</html>

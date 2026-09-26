@@ -1,0 +1,12 @@
+{
+  "name": "LumiOS — Lumi Nails & Med Spa",
+  "short_name": "LumiOS",
+  "description": "Smart-building control for Lumi Nails & Med Spa.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#2b2018",
+  "theme_color": "#2b2018",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

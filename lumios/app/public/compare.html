@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumiOS vs. a Smart-Building Vendor — Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--plum:#2b2018;--rose:#9a6f35;--gold:#c9a96e;--cream:#f8f4ee;--ink:#111111;--muted:#8a7f70;--ok:#6f9e7e}
+  *{box-sizing:border-box}
+  body{margin:0;background:#efe7ec;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  .sheet{max-width:860px;margin:24px auto;background:#fff;padding:38px 44px;box-shadow:0 6px 24px rgba(58,37,53,.14);border-radius:10px}
+  header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:16px;margin-bottom:18px}
+  .logo{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--rose),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:24px}
+  h1{margin:0;font-size:23px;color:var(--plum)}
+  header small{color:var(--muted)}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin:26px 0 10px}
+  p.lead{font-size:15px;color:#4a3a43}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #eee;vertical-align:top}
+  th{background:#faf4f7;color:var(--plum);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+  td.y{color:var(--ok);font-weight:700;white-space:nowrap}
+  .check li{margin:4px 0}
+  .check{columns:2;font-size:14px;padding-left:18px}
+  .cost{background:#f4fbf6;border:1px solid #d8ecdf;border-radius:12px;padding:14px 18px;margin-top:8px;font-size:14px}
+  .q{background:#faf4f7;border-radius:12px;padding:6px 18px 12px;margin-top:6px}
+  .q li{margin:6px 0;font-size:14px}
+  .toolbar{max-width:860px;margin:0 auto;text-align:right}
+  .btn{background:var(--plum);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
+  footer{margin-top:26px;border-top:1px solid #eee;padding-top:12px;color:var(--muted);font-size:12px}
+  @media print{
+    body{background:#fff}
+    .toolbar{display:none}
+    .sheet{box-shadow:none;margin:0;max-width:none;padding:0 6px;border-radius:0}
+    h2{color:var(--plum)}
+    a[href]:after{content:""}
+  }
+  body{font-family:'Jost',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Print / Save as PDF</button></div>
+<div class="sheet">
+  <header>
+    <div class="logo">L</div>
+    <div><h1>LumiOS vs. a Smart-Building Vendor</h1>
+      <small>Lumi Nails &amp; Med Spa — capability &amp; value comparison</small></div>
+  </header>
+
+  <p class="lead">LumiOS is a complete smart-building control system Lumi already owns. This sheet
+  compares it against what a typical installed-by-a-vendor system (e.g. a Brightstar-style quote)
+  provides — use it to evaluate any proposal before you sign.</p>
+
+  <h2>Everything LumiOS already does</h2>
+  <ul class="check">
+    <li>✔ Lock / unlock doors (auto-lock)</li>
+    <li>✔ Lights on/off + dimming per zone</li>
+    <li>✔ Motorized shades per zone</li>
+    <li>✔ Thermostat per zone + setback</li>
+    <li>✔ Music per zone + whole-spa audio</li>
+    <li>✔ Security cameras + motion alerts</li>
+    <li>✔ Arm / disarm security panel</li>
+    <li>✔ Scenes: Open · Treatment · Goodnight · Close · Away</li>
+    <li>✔ Voice control</li>
+    <li>✔ Schedules + after-hours triggers</li>
+    <li>✔ Roles: Owner / Manager / Staff</li>
+    <li>✔ Per-user front-desk PINs</li>
+    <li>✔ Owner two-factor sign-in</li>
+    <li>✔ Full audit log (who/what/when)</li>
+    <li>✔ Energy + UPS backup monitoring</li>
+    <li>✔ Phone push alerts (installable app)</li>
+  </ul>
+
+  <h2>Side by side</h2>
+  <table>
+    <tr><th>Capability</th><th>LumiOS</th><th>Typical vendor system</th></tr>
+    <tr><td>One app for doors, lights, shades, climate, music, cameras</td><td class="y">Yes</td><td>Often several apps / brands</td></tr>
+    <tr><td>Open standards (Matter / Zigbee / Z-Wave / ONVIF)</td><td class="y">Yes</td><td>Sometimes proprietary / locked-in</td></tr>
+    <tr><td>Works if the internet drops (local-first)</td><td class="y">Yes</td><td>Varies — many are cloud-dependent</td></tr>
+    <tr><td>Roles, per-user PINs, owner 2FA</td><td class="y">Yes</td><td>Varies</td></tr>
+    <tr><td>Audit log of who unlocked which door, when</td><td class="y">Yes</td><td>Often add-on / absent</td></tr>
+    <tr><td>Door key override + defined fail-safe</td><td class="y">Required</td><td>Must confirm in proposal</td></tr>
+    <tr><td>You own the software</td><td class="y">Yes</td><td>Usually licensed/leased</td></tr>
+    <tr><td>Monthly software fee</td><td class="y">$0</td><td>Common</td></tr>
+    <tr><td>Camera footage you keep (no forced cloud sub.)</td><td class="y">Yes (local NVR)</td><td>Often subscription cloud</td></tr>
+    <tr><td>Switch installers / hardware later</td><td class="y">Yes</td><td>Often restricted</td></tr>
+    <tr><td>Physical hardware + installation</td><td>Add off-the-shelf gear</td><td class="y">Included (at their price)</td></tr>
+  </table>
+  <p style="font-size:12.5px;color:var(--muted)">The one thing a vendor provides that software can't: the physical devices and installation.
+  LumiOS works with any reputable Matter/Zigbee/ONVIF gear, so you choose the hardware and the installer.</p>
+
+  <h2>What this means for cost</h2>
+  <div class="cost">
+    You already own the expensive, recurring part — the <b>control software</b>, with <b>no monthly fee</b>
+    and <b>no lock-in</b>. A vendor quote is mostly <b>hardware + labor</b>, which you can source competitively.
+    Ask any vendor to quote <b>install only</b>, since LumiOS already covers the brains.
+  </div>
+
+  <h2>Questions to ask before you sign</h2>
+  <ol class="q">
+    <li>Open standards, or locked to your brand and app?</li>
+    <li>Do doors and lights still work if the internet is down?</li>
+    <li>What's the door fail-safe on power/network loss — and is there a physical key override?</li>
+    <li>Owner/manager/staff roles with individual PINs?</li>
+    <li>Is there an audit log of door unlocks?</li>
+    <li>Do I keep camera footage locally, with no forced cloud subscription?</li>
+    <li>If I change installers later, do I keep the hub, devices, and footage?</li>
+    <li>Can you quote <i>installation only</i> (I already have the control system)?</li>
+  </ol>
+
+  <footer>Prepared with LumiOS · Lumi Nails &amp; Med Spa · Demo runs on simulated devices; live control needs compatible smart hardware + an on-site hub.</footer>
+</div>
+</body>
+</html>
