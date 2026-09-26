@@ -342,6 +342,24 @@ async function setSalonTemp(locId, value, ctx = {}) {
   return { temp: t };
 }
 
+/* Whole-salon thermostat mode: "off" | "heat" | "cool" | "heat_cool" (auto).
+   Moves both Honeywell T6 units together (any zone maps to both thermostats). */
+const HVAC_MODES = ["off", "heat", "cool", "heat_cool"];
+const HVAC_LABEL = { off: "Off", heat: "Heat", cool: "Cool", heat_cool: "Auto" };
+async function setSalonMode(locId, mode, ctx = {}) {
+  const L = loc(locId);
+  if (!HVAC_MODES.includes(mode)) throw new Error("Unknown thermostat mode");
+  const firstZone = Object.keys(L.zones)[0];
+  await driver.setTempMode(firstZone, mode);
+  L.hvac = L.hvac || {};
+  L.hvac.mode = mode;
+  persist();
+  if (ctx.log !== false)
+    audit.record({ msg: `Thermostat turned ${mode === "off" ? "OFF" : HVAC_LABEL[mode]}`, who: ctx.who, role: ctx.role, category: "temp", loc: locId });
+  emitChange(locId, "zones");
+  return { mode };
+}
+
 /* ---------- music ---------- */
 async function setMusic(locId, zoneId, playlist, vol, ctx = {}) {
   const L = loc(locId);
@@ -749,7 +767,7 @@ module.exports = {
   getState, applyExternalState, startDriverSync, hasLocation, listLocations, addLocation, renameLocation, removeLocation,
   addZone, updateZone,
   setDoor, lock, unlock,
-  setLight, setCct, setColor, setOneShade, setShadeGroup, setTemp, setSalonTemp, setMusic, setMusicGroup, setAudioGroup, updateAudioGroups,
+  setLight, setCct, setColor, setOneShade, setShadeGroup, setTemp, setSalonTemp, setSalonMode, setMusic, setMusicGroup, setAudioGroup, updateAudioGroups,
   setAutoLight, motion, autoLightTick, applyLightPreset, saveLightPreset, deleteLightPreset,
   setEquipment, addSterilization, listSterilization,
   setCamAI, detectAI, listAIEvents, setSignage,

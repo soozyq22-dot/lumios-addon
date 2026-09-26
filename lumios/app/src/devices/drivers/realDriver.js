@@ -149,6 +149,10 @@ module.exports = {
   async setTemp(zoneId, value) {
     return svc("climate", "set_temperature", { entity_id: ent("temp", zoneId), temperature: value });
   },
+  /* thermostat on/off + mode: "off" | "heat" | "cool" | "heat_cool" (auto) */
+  async setTempMode(zoneId, mode) {
+    return svc("climate", "set_hvac_mode", { entity_id: ent("temp", zoneId), hvac_mode: mode });
+  },
 
   /* music: per-zone playlist + volume (Sonos / media_player) */
   async setMusic(zoneId, playlist, vol) {

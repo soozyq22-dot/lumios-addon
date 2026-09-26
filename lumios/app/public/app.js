@@ -579,18 +579,27 @@ function renderSalonTemp() {
   if (!P().allZones) { wrap.innerHTML = '<div class="hint">Salon temperature is available to managers and owners.</div>'; return; }
   const ids = Object.keys(STATE.zones || {});
   const cur = ids.length ? STATE.zones[ids[0]].temp : 72;
+  const mode = (STATE.hvac && STATE.hvac.mode) || "heat_cool";
+  const off = mode === "off";
+  const modes = [["off", "Off"], ["heat", "Heat"], ["cool", "Cool"], ["heat_cool", "Auto"]];
+  const modeBtns = modes.map(([m, label]) =>
+    `<button class="hvac-mode${m === mode ? " active" : ""}${m === "off" ? " off" : ""}" data-mode="${m}">${label}</button>`).join("");
   wrap.innerHTML = `
     <div class="salon-temp">
       <div class="salon-temp-lbl"><span class="e">${ICON.temp}</span> Whole salon — both thermostats</div>
       <div class="salon-temp-ctrl">
-        <button class="tstep" data-salon="-1" aria-label="Cooler">−</button>
-        <span class="salon-temp-val">${cur}°<span class="salon-temp-unit">F</span></span>
-        <button class="tstep" data-salon="1" aria-label="Warmer">+</button>
+        <button class="tstep" data-salon="-1" aria-label="Cooler" ${off ? "disabled" : ""}>−</button>
+        <span class="salon-temp-val${off ? " is-off" : ""}">${off ? "Off" : `${cur}°<span class="salon-temp-unit">F</span>`}</span>
+        <button class="tstep" data-salon="1" aria-label="Warmer" ${off ? "disabled" : ""}>+</button>
       </div>
-    </div>`;
+    </div>
+    <div class="hvac-modes">${modeBtns}</div>`;
   wrap.querySelectorAll("[data-salon]").forEach((b) => b.onclick = () => {
     const now = STATE.zones[Object.keys(STATE.zones)[0]].temp;
     cmd("/api/temp/salon", { value: now + (+b.dataset.salon) });
+  });
+  wrap.querySelectorAll("[data-mode]").forEach((b) => b.onclick = () => {
+    cmd("/api/temp/salon/mode", { mode: b.dataset.mode });
   });
 }
 

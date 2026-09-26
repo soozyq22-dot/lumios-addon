@@ -31,6 +31,7 @@ module.exports = {
   async setCct(zoneId, kelvin) { await delay(); return { ok: true }; },
   async setColor(zoneId, hex) { await delay(); return { ok: true }; },
   async setTemp(zoneId, value) { await delay(); return { ok: true }; },
+  async setTempMode(zoneId, mode) { await delay(); return { ok: true }; },
   async setMusic(zoneId, playlist, vol) { await delay(); return { ok: true }; },
   async setCamera(camId, opts) { await delay(); return { ok: true }; },
   async setSecurity(mode) { await delay(); return { ok: true }; },

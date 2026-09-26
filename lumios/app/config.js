@@ -96,6 +96,10 @@ module.exports = {
       { id: "back",      name: "Break Room",      zones: ["break"] },
     ],
 
+    // Whole-salon thermostat mode (both Honeywell T6 units move together):
+    // off | heat | cool | heat_cool (auto).
+    hvac: { mode: "heat_cool" },
+
     // Unified security panel: disarmed | home (motion only inside off) | away (fully armed)
     security: { mode: "disarmed", alarm: false, siren: false, since: null },
 

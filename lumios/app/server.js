@@ -69,6 +69,7 @@ function statePayload(user, locId) {
     locationName: s.name,
     locations: all.filter((l) => perms.canLocation(user, l.id)),
     zones: s.zones,
+    hvac: s.hvac || { mode: "heat_cool" },
     doors: s.doors,
     shades: s.shades || [],
     playlists: s.playlists,
@@ -302,6 +303,11 @@ const server = http.createServer(async (req, res) => {
       if (!p.allZones) return err(res, 403, "Salon temperature needs manager or owner");
       const b = await readBody(req);
       try { return send(res, 200, await dm.setSalonTemp(locId, b.value, ctx)); } catch (e) { return err(res, 400, e.message); }
+    }
+    if (method === "POST" && pathname === "/api/temp/salon/mode") {
+      if (!p.allZones) return err(res, 403, "Salon temperature needs manager or owner");
+      const b = await readBody(req);
+      try { return send(res, 200, await dm.setSalonMode(locId, b.mode, ctx)); } catch (e) { return err(res, 400, e.message); }
     }
     if (method === "POST" && pathname === "/api/music") {
       const b = await readBody(req);
