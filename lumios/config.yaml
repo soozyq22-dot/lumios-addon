@@ -1,5 +1,5 @@
 name: LumiOS
-version: "1.0.0"
+version: "1.0.1"
 slug: lumios
 description: Smart spa control for Lumi Nails and Med Spa
 url: https://github.com/soozyq22-dot/lumios-addon
@@ -8,6 +8,7 @@ arch:
   - amd64
 init: false
 host_network: false
+homeassistant_api: true
 ports:
   4200/tcp: 4200
 ports_description:

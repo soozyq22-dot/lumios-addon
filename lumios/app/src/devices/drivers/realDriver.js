@@ -16,8 +16,12 @@
    written — you only supply the entity ids.
    ============================================================ */
 
-const HUB_URL = process.env.LUMIOS_HUB_URL || "http://homeassistant.local:8123";
-const TOKEN = process.env.LUMIOS_HUB_TOKEN || "";
+// When LumiOS runs as a Home Assistant add-on, the Supervisor injects
+// SUPERVISOR_TOKEN and proxies the Core API at http://supervisor/core — so no
+// manual Long-Lived Access Token is needed. Falls back to an explicit hub URL +
+// token when run stand-alone (outside the add-on).
+const HUB_URL = process.env.LUMIOS_HUB_URL || (process.env.SUPERVISOR_TOKEN ? "http://supervisor/core" : "http://homeassistant.local:8123");
+const TOKEN = process.env.LUMIOS_HUB_TOKEN || process.env.SUPERVISOR_TOKEN || "";
 
 // Shades are Hunter Douglas PowerView **Gen 3**. Reserve the Gen 3 Gateway's IP
 // in the router and set it here. Two ways to drive them (either works):
@@ -51,10 +55,18 @@ const MAP = {
     sh_5: "cover.shade_5", sh_6: "cover.shade_6", sh_7: "cover.shade_7", sh_8: "cover.shade_8",
   },
   shadeGen3: { sh_1: 1, sh_2: 2, sh_3: 3, sh_4: 4, sh_5: 5, sh_6: 6, sh_7: 7, sh_8: 8 },
+  // Lumi runs on TWO Honeywell T6 Z-Wave thermostats (one HVAC zone each):
+  // front-of-house rooms drive the FRONT thermostat, back rooms + treatment +
+  // break drive the BACK thermostat. Move a room between the two lines to re-zone.
   temp: {
-    reception: "climate.reception", pedicure: "climate.pedicure", manicure: "climate.manicure",
-    room1: "climate.treatment_room_1", room2: "climate.treatment_room_2",
-    bath1: "climate.bathroom_1", bath2: "climate.bathroom_2", break: "climate.break_room",
+    reception: "climate.front_hallway_thermostat",
+    pedicure:  "climate.front_hallway_thermostat",
+    manicure:  "climate.front_hallway_thermostat",
+    bath1:     "climate.front_hallway_thermostat",
+    room1:     "climate.back_hallway_thermostat",
+    room2:     "climate.back_hallway_thermostat",
+    break:     "climate.back_hallway_thermostat",
+    bath2:     "climate.back_hallway_thermostat",
   },
   music: {
     reception: "media_player.reception", pedicure: "media_player.pedicure", manicure: "media_player.manicure",
