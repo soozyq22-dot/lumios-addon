@@ -795,11 +795,12 @@ async function renderLiveCams() {
   if (!cams.length) { wrap.innerHTML = `<div class="hint">No live cameras found on the hub yet.</div>`; liveCamsLoaded = false; return; }
   const src = (e) => `/api/camera_proxy?entity=${encodeURIComponent(e)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`;
   wrap.innerHTML = cams.map((c) => `
-    <div class="cam livecam">
+    <div class="cam livecam" data-camopen="${c.entity_id}" data-camname="${c.name}" title="Tap to enlarge">
       <div class="feed"><img data-cament="${c.entity_id}" src="${src(c.entity_id)}" alt="${c.name}"
         onload="this.classList.remove('camerr')" onerror="this.classList.add('camerr')"></div>
       <div class="tag"><span>${c.name}</span><span class="live">● LIVE</span></div>
     </div>`).join("");
+  wrap.querySelectorAll("[data-camopen]").forEach((t) => t.onclick = () => openCamera(t.dataset.camopen, t.dataset.camname));
   clearInterval(liveCamsTimer);
   liveCamsTimer = setInterval(() => {
     if (document.hidden) return;         // don't hammer the hub while hidden
@@ -812,6 +813,33 @@ async function renderLiveCams() {
       pre.src = src(img.dataset.cament);
     });
   }, 2000);
+}
+
+/* ---- enlarged single-camera view ---- */
+let bigCamTimer = null;
+function openCamera(entity, name) {
+  if (!entity) return;
+  const modal = document.getElementById("camModal");
+  const img = document.getElementById("camModalImg");
+  if (!modal || !img) return;
+  const bigSrc = () => `/api/camera_proxy?entity=${encodeURIComponent(entity)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`;
+  document.getElementById("camModalName").textContent = name || "Camera";
+  img.src = bigSrc();
+  modal.style.display = "flex";
+  clearInterval(bigCamTimer);
+  bigCamTimer = setInterval(() => {
+    if (document.hidden) return;
+    const pre = new Image();
+    pre.onload = () => { img.src = pre.src; };   // keep last frame on a hiccup
+    pre.src = bigSrc();
+  }, 1000);                                       // refresh faster for the focused view
+}
+function closeCamera() {
+  clearInterval(bigCamTimer); bigCamTimer = null;
+  const modal = document.getElementById("camModal");
+  if (modal) modal.style.display = "none";
+  const img = document.getElementById("camModalImg");
+  if (img) img.src = "";
 }
 
 /* ---- AI events feed (discreet monitoring) ---- */
@@ -1047,6 +1075,9 @@ async function boot() {
   await renderLog();
   connectStream();
   bindResync();
+  document.getElementById("camModalClose").onclick = closeCamera;
+  document.getElementById("camModal").onclick = (e) => { if (e.target.id === "camModal") closeCamera(); };
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCamera(); });
   setupVoice();
   registerSW();
   document.getElementById("simOutage").onclick = (e) => { e.preventDefault(); api("/api/simulate/outage", { method: "POST", body: { onGrid: !(STATE.power && STATE.power.onGrid) } }); };
