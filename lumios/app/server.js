@@ -365,7 +365,8 @@ const server = http.createServer(async (req, res) => {
     // Live cameras discovered from the hub (Home Assistant)
     if (method === "GET" && pathname === "/api/cameras/live") {
       if (!p.cameras) return err(res, 403, "No camera access");
-      try { return send(res, 200, { cameras: await dm.listLiveCameras(locId) }); } catch (e) { return err(res, 400, e.message); }
+      const allDbg = url.searchParams.get("all") === "1";
+      try { return send(res, 200, { cameras: await dm.listLiveCameras(locId, { all: allDbg }) }); } catch (e) { return err(res, 400, e.message); }
     }
     // Proxy a live JPEG snapshot from the hub so the browser can show the feed.
     // Token may come via ?token= so it works as an <img> src.

@@ -427,9 +427,9 @@ async function getCameraFeed(locId, camId) {
 
 /* Live cameras discovered from the hub (Home Assistant). Returns [] on the mock
    driver or if the hub can't be reached, so the UI just shows nothing. */
-async function listLiveCameras(locId) {
+async function listLiveCameras(locId, opts = {}) {
   if (!driver.listCameras) return [];
-  try { return await driver.listCameras(); } catch (e) { return []; }
+  try { return await driver.listCameras(opts); } catch (e) { return []; }
 }
 async function cameraSnapshot(entityId) {
   if (!driver.cameraSnapshot) throw new Error("Live camera not available");

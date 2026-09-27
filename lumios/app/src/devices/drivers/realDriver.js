@@ -195,19 +195,23 @@ module.exports = {
      entities per camera; we prefer the lightweight "fluent"/sub stream for a
      smooth dashboard view), and proxy JPEG snapshots so the browser can show a
      near-live picture without RTSP/HLS. */
-  async listCameras() {
+  async listCameras(opts = {}) {
     if (!TOKEN) throw new Error("Set a hub token to list cameras.");
     const res = await fetch(`${HUB_URL}/api/states`, { headers: { "Authorization": `Bearer ${TOKEN}` } });
     if (!res.ok) throw new Error(`Home Assistant /api/states ${res.status}`);
     const all = (await res.json()).filter((s) => s.entity_id.startsWith("camera."));
-    // Prefer the smooth sub-stream ("fluent"); fall back to whatever exists.
-    const fluent = all.filter((s) => /_(fluent|sub)$/.test(s.entity_id));
-    const pick = fluent.length ? fluent : all;
+    // Debug: return every camera entity + state so we can see exactly what HA has.
+    if (opts.all) return all.map((s) => ({ entity_id: s.entity_id, state: s.state, name: (s.attributes && s.attributes.friendly_name) || s.entity_id }));
+    const avail = all.filter((s) => s.state !== "unavailable");
+    // Reolink exposes several stream entities per camera; prefer the smooth
+    // "fluent"/"sub" stream. HA appends _2/_3 to de-dupe identical camera names,
+    // so allow an optional trailing number.
+    const fluent = avail.filter((s) => /_(fluent|sub)(_\d+)?$/.test(s.entity_id));
+    const pick = fluent.length ? fluent : avail;
     return pick
-      .filter((s) => s.state !== "unavailable")
       .map((s) => ({
         entity_id: s.entity_id,
-        name: (s.attributes && s.attributes.friendly_name) || s.entity_id,
+        name: ((s.attributes && s.attributes.friendly_name) || s.entity_id).replace(/ (Fluent|Sub)$/i, ""),
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
   },
