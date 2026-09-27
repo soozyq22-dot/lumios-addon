@@ -44,4 +44,9 @@ module.exports = {
     await delay();
     return { type: "simulated", url: null, camId };
   },
+
+  // Live-camera discovery + snapshot are Home-Assistant features; the simulator
+  // has no real feeds, so it reports none.
+  async listCameras() { await delay(); return []; },
+  async cameraSnapshot(entityId) { throw new Error("No live camera in simulator mode"); },
 };

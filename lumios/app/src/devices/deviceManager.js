@@ -425,6 +425,17 @@ async function getCameraFeed(locId, camId) {
   return driver.getCameraFeed(camId);
 }
 
+/* Live cameras discovered from the hub (Home Assistant). Returns [] on the mock
+   driver or if the hub can't be reached, so the UI just shows nothing. */
+async function listLiveCameras(locId) {
+  if (!driver.listCameras) return [];
+  try { return await driver.listCameras(); } catch (e) { return []; }
+}
+async function cameraSnapshot(entityId) {
+  if (!driver.cameraSnapshot) throw new Error("Live camera not available");
+  return driver.cameraSnapshot(entityId);
+}
+
 /* ---------- unified security panel ---------- */
 async function setSecurity(locId, mode, ctx = {}) {
   if (!["disarmed", "home", "away"].includes(mode)) throw new Error("Invalid security mode");
@@ -775,7 +786,7 @@ module.exports = {
   fridgeTick, recordFridgeTemp, listFridgeReadings,
   setRoomStatus, checklistTick, toggleChecklist,
   setDiffuser, setDisplay, buildDigest, pushDigest,
-  setCamera, getCameraFeed,
+  setCamera, getCameraFeed, listLiveCameras, cameraSnapshot,
   setSecurity, powerSnapshot, setGrid, powerTick,
   raiseMotion,
 };

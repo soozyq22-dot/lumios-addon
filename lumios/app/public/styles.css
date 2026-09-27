@@ -98,6 +98,9 @@ select.mini{border:1px solid #e3d7de;border-radius:10px;padding:6px 8px;font-siz
   repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 2px,transparent 2px 4px),
   radial-gradient(circle at 30% 20%,#2c2230,#15101a);}
 .cam.night .feed{filter:grayscale(1) brightness(.7) contrast(1.2)}
+.livecam .feed{background:#0c0910}
+.livecam .feed img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.livecam .feed img.camerr{opacity:0}
 .cam .tag{position:relative;padding:8px 10px;font-size:12px;display:flex;justify-content:space-between;width:100%;
   background:linear-gradient(transparent,rgba(0,0,0,.55))}
 .cam .live{color:#7CFC9B;font-weight:700}

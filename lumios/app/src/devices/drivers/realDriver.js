@@ -190,6 +190,34 @@ module.exports = {
     return { type: "rtsp", url: ent("cams", camId), camId };
   },
 
+  /* ---- live cameras via Home Assistant ----
+     Discover every camera.* entity HA knows about (Reolink adds several stream
+     entities per camera; we prefer the lightweight "fluent"/sub stream for a
+     smooth dashboard view), and proxy JPEG snapshots so the browser can show a
+     near-live picture without RTSP/HLS. */
+  async listCameras() {
+    if (!TOKEN) throw new Error("Set a hub token to list cameras.");
+    const res = await fetch(`${HUB_URL}/api/states`, { headers: { "Authorization": `Bearer ${TOKEN}` } });
+    if (!res.ok) throw new Error(`Home Assistant /api/states ${res.status}`);
+    const all = (await res.json()).filter((s) => s.entity_id.startsWith("camera."));
+    // Prefer the smooth sub-stream ("fluent"); fall back to whatever exists.
+    const fluent = all.filter((s) => /_(fluent|sub)$/.test(s.entity_id));
+    const pick = fluent.length ? fluent : all;
+    return pick
+      .filter((s) => s.state !== "unavailable")
+      .map((s) => ({
+        entity_id: s.entity_id,
+        name: (s.attributes && s.attributes.friendly_name) || s.entity_id,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  },
+  async cameraSnapshot(entityId) {
+    if (!/^camera\.[a-z0-9_]+$/i.test(entityId)) throw new Error("Bad camera id");
+    const res = await fetch(`${HUB_URL}/api/camera_proxy/${entityId}`, { headers: { "Authorization": `Bearer ${TOKEN}` } });
+    if (!res.ok) throw new Error(`camera_proxy ${res.status}`);
+    return { buffer: Buffer.from(await res.arrayBuffer()), contentType: res.headers.get("content-type") || "image/jpeg" };
+  },
+
   /* ---- state feedback: read device state BACK from Home Assistant ----
      So LumiOS reflects reality (wall switch, HA app, failed command) instead of
      only what it last sent. deviceManager polls this via startSync().

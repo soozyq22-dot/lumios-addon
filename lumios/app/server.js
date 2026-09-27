@@ -362,6 +362,22 @@ const server = http.createServer(async (req, res) => {
       const camId = pathname.split("/")[3];
       try { return send(res, 200, await dm.getCameraFeed(locId, camId)); } catch (e) { return err(res, 400, e.message); }
     }
+    // Live cameras discovered from the hub (Home Assistant)
+    if (method === "GET" && pathname === "/api/cameras/live") {
+      if (!p.cameras) return err(res, 403, "No camera access");
+      try { return send(res, 200, { cameras: await dm.listLiveCameras(locId) }); } catch (e) { return err(res, 400, e.message); }
+    }
+    // Proxy a live JPEG snapshot from the hub so the browser can show the feed.
+    // Token may come via ?token= so it works as an <img> src.
+    if (method === "GET" && pathname === "/api/camera_proxy") {
+      if (!p.cameras) return err(res, 403, "No camera access");
+      const entity = url.searchParams.get("entity") || "";
+      try {
+        const { buffer, contentType } = await dm.cameraSnapshot(entity);
+        res.writeHead(200, { "Content-Type": contentType, "Cache-Control": "no-store" });
+        return res.end(buffer);
+      } catch (e) { return err(res, 502, e.message); }
+    }
 
     // ---- AI camera detection ----
     if (method === "POST" && pathname === "/api/camera/ai") {

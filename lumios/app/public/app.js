@@ -792,7 +792,37 @@ function renderCams() {
     const id = e.currentTarget.dataset.aitoggle;
     cmd("/api/camera/ai", { camId: id, enabled: !(STATE.cams[id].ai && STATE.cams[id].ai.enabled) });
   });
+  renderLiveCams();
   renderAIEvents();
+}
+
+/* ---- Live cameras (real feeds from Home Assistant) ----
+   Built once, then each tile's image refreshes on a timer for a near-live view. */
+let liveCamsLoaded = false;
+let liveCamsTimer = null;
+async function renderLiveCams() {
+  const wrap = document.getElementById("liveCams");
+  if (!wrap) return;
+  if (!P().cameras) { clearInterval(liveCamsTimer); liveCamsTimer = null; liveCamsLoaded = false; wrap.innerHTML = ""; return; }
+  if (liveCamsLoaded) return;            // already built; images self-refresh
+  liveCamsLoaded = true;
+  wrap.innerHTML = `<div class="hint">Finding your cameras…</div>`;
+  let cams = [];
+  try { cams = (await api("/api/cameras/live")).cameras || []; }
+  catch (e) { wrap.innerHTML = `<div class="hint">Couldn't reach the cameras: ${e.message}</div>`; liveCamsLoaded = false; return; }
+  if (!cams.length) { wrap.innerHTML = `<div class="hint">No live cameras found on the hub yet.</div>`; liveCamsLoaded = false; return; }
+  const src = (e) => `/api/camera_proxy?entity=${encodeURIComponent(e)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`;
+  wrap.innerHTML = cams.map((c) => `
+    <div class="cam livecam">
+      <div class="feed"><img data-cament="${c.entity_id}" src="${src(c.entity_id)}" alt="${c.name}"
+        onerror="this.classList.add('camerr')"></div>
+      <div class="tag"><span>${c.name}</span><span class="live">● LIVE</span></div>
+    </div>`).join("");
+  clearInterval(liveCamsTimer);
+  liveCamsTimer = setInterval(() => {
+    if (document.hidden) return;         // don't hammer the hub while hidden
+    wrap.querySelectorAll("img[data-cament]").forEach((img) => { img.src = src(img.dataset.cament); });
+  }, 2000);
 }
 
 /* ---- AI events feed (discreet monitoring) ---- */
