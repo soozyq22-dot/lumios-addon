@@ -775,25 +775,7 @@ function renderCams() {
   const secEls = document.querySelectorAll("[data-secure]");
   if (!P().cameras) { secEls.forEach((el) => el.style.display = "none"); return; }
   secEls.forEach((el) => el.style.display = el.classList.contains("cams") ? "grid" : (el.tagName === "A" ? "inline" : "flex"));
-  const wrap = document.getElementById("cams");
-  wrap.innerHTML = "";
-  for (const id in STATE.cams) {
-    const c = STATE.cams[id];
-    const aiOn = c.ai && c.ai.enabled;
-    const el = document.createElement("div"); el.className = "cam" + (c.alert ? " alert" : "") + (c.nightMode ? " night" : "");
-    el.innerHTML = `<div class="feed"></div><div class="tag"><span>${c.name}${c.nightMode ? " 🌙" : ""}</span>
-      <span class="cambadges">
-        <button class="aibadge ${aiOn ? "on" : "off"}" data-aitoggle="${id}" title="Toggle AI detection">AI</button>
-        <span class="live">${c.alert ? "● ALERT" : "● LIVE"}</span>
-      </span></div>`;
-    wrap.appendChild(el);
-  }
-  wrap.querySelectorAll("[data-aitoggle]").forEach((b) => b.onclick = (e) => {
-    const id = e.currentTarget.dataset.aitoggle;
-    cmd("/api/camera/ai", { camId: id, enabled: !(STATE.cams[id].ai && STATE.cams[id].ai.enabled) });
-  });
   renderLiveCams();
-  renderAIEvents();
 }
 
 /* ---- Live cameras (real feeds from Home Assistant) ----
@@ -940,7 +922,7 @@ async function handleVoice(said) {
   try {
     const r = await api("/api/voice", { method: "POST", body: { text: said } });
     toast((r.ok ? "✅ " : "🤔 ") + r.message);
-    if (r.intent && r.intent.type === "camera") document.getElementById("cams").scrollIntoView({ behavior: "smooth" });
+    if (r.intent && r.intent.type === "camera") document.getElementById("liveCams")?.scrollIntoView({ behavior: "smooth" });
   } catch (e) { toast("🔒 " + e.message); }
 }
 
@@ -1060,7 +1042,6 @@ async function boot() {
   bindResync();
   setupVoice();
   registerSW();
-  document.getElementById("simMotion").onclick = (e) => { e.preventDefault(); api("/api/simulate/motion", { method: "POST", body: { camId: "back" } }); };
   document.getElementById("simOutage").onclick = (e) => { e.preventDefault(); api("/api/simulate/outage", { method: "POST", body: { onGrid: !(STATE.power && STATE.power.onGrid) } }); };
 }
 
