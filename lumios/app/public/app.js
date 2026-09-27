@@ -797,7 +797,7 @@ async function renderLiveCams() {
   wrap.innerHTML = cams.map((c) => `
     <div class="cam livecam">
       <div class="feed"><img data-cament="${c.entity_id}" src="${src(c.entity_id)}" alt="${c.name}"
-        onerror="this.classList.add('camerr')"></div>
+        onload="this.classList.remove('camerr')" onerror="this.classList.add('camerr')"></div>
       <div class="tag"><span>${c.name}</span><span class="live">● LIVE</span></div>
     </div>`).join("");
   clearInterval(liveCamsTimer);
