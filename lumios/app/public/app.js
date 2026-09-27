@@ -803,7 +803,14 @@ async function renderLiveCams() {
   clearInterval(liveCamsTimer);
   liveCamsTimer = setInterval(() => {
     if (document.hidden) return;         // don't hammer the hub while hidden
-    wrap.querySelectorAll("img[data-cament]").forEach((img) => { img.src = src(img.dataset.cament); });
+    wrap.querySelectorAll("img[data-cament]").forEach((img) => {
+      // Preload the next frame off-screen; only swap it in once it actually
+      // loads. If a frame fails (a brief Reolink stream drop), we keep showing
+      // the last good picture instead of going blank.
+      const pre = new Image();
+      pre.onload = () => { img.src = pre.src; img.classList.remove("camerr"); };
+      pre.src = src(img.dataset.cament);
+    });
   }, 2000);
 }
 
