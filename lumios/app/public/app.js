@@ -6,6 +6,16 @@ let STATE = null;
 let challengeId = null;
 let activeLoc = localStorage.getItem("lumios_loc") || "main";
 
+/* When Lumi runs embedded inside Home Assistant (remote access via HA Cloud),
+   it's served under a path prefix like /api/hassio_ingress/<token>/. Resolve
+   every request against that base so it works both embedded and on the direct
+   port. On the direct port BASE is just "/", so nothing changes locally. */
+const BASE = (function () {
+  const p = location.pathname;
+  return p.endsWith("/") ? p : p.slice(0, p.lastIndexOf("/") + 1);
+})();
+function U(path) { return BASE + String(path).replace(/^\//, ""); }
+
 /* ---------- API helper (location-scoped) ---------- */
 function withLoc(path) {
   if (!path.startsWith("/api") || /\/api\/(login|2fa|pin)\b/.test(path)) return path;
@@ -14,7 +24,7 @@ function withLoc(path) {
 async function api(path, opts = {}) {
   const headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
   if (TOKEN) headers["Authorization"] = "Bearer " + TOKEN;
-  const res = await fetch(withLoc(path), { method: opts.method || "GET", headers, body: opts.body ? JSON.stringify(opts.body) : undefined });
+  const res = await fetch(U(withLoc(path)), { method: opts.method || "GET", headers, body: opts.body ? JSON.stringify(opts.body) : undefined });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || "Request failed");
   return data;
@@ -403,7 +413,7 @@ function renderSterilization() {
 async function exportSterilCsv(e) {
   if (e) e.preventDefault();
   try {
-    const res = await fetch(withLoc("/api/sterilization.csv"), { headers: { "Authorization": "Bearer " + TOKEN } });
+    const res = await fetch(U(withLoc("/api/sterilization.csv")), { headers: { "Authorization": "Bearer " + TOKEN } });
     if (!res.ok) throw new Error("export failed");
     const blob = await res.blob(); const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "lumios-sterilization.csv"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
@@ -414,7 +424,7 @@ async function exportSterilCsv(e) {
 /* ---- generic authed file download ---- */
 async function downloadAuth(path, filename) {
   try {
-    const res = await fetch(withLoc(path), { headers: { "Authorization": "Bearer " + TOKEN } });
+    const res = await fetch(U(withLoc(path)), { headers: { "Authorization": "Bearer " + TOKEN } });
     if (!res.ok) throw new Error("export failed");
     const blob = await res.blob(); const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
@@ -511,7 +521,7 @@ function renderReports() {
     try { const g = await api("/api/digest"); document.getElementById("digestOut").innerHTML = digestHtml(g); } catch (e) { toast("⚠️ " + e.message); }
   };
   document.getElementById("compBtn").onclick = async () => {
-    try { const res = await fetch(withLoc("/api/compliance.html"), { headers: { "Authorization": "Bearer " + TOKEN } }); const html = await res.text(); const w = window.open("", "_blank"); w.document.write(html); w.document.close(); } catch (e) { toast("⚠️ " + e.message); }
+    try { const res = await fetch(U(withLoc("/api/compliance.html")), { headers: { "Authorization": "Bearer " + TOKEN } }); const html = await res.text(); const w = window.open("", "_blank"); w.document.write(html); w.document.close(); } catch (e) { toast("⚠️ " + e.message); }
   };
 }
 function digestHtml(g) {
@@ -793,7 +803,7 @@ async function renderLiveCams() {
   try { cams = (await api("/api/cameras/live")).cameras || []; }
   catch (e) { wrap.innerHTML = `<div class="hint">Couldn't reach the cameras: ${e.message}</div>`; liveCamsLoaded = false; return; }
   if (!cams.length) { wrap.innerHTML = `<div class="hint">No live cameras found on the hub yet.</div>`; liveCamsLoaded = false; return; }
-  const src = (e) => `/api/camera_proxy?entity=${encodeURIComponent(e)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`;
+  const src = (e) => U(`/api/camera_proxy?entity=${encodeURIComponent(e)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`);
   wrap.innerHTML = cams.map((c) => `
     <div class="cam livecam" data-camopen="${c.entity_id}" data-camname="${c.name}" title="Tap to enlarge">
       <div class="feed"><img data-cament="${c.entity_id}" src="${src(c.entity_id)}" alt="${c.name}"
@@ -822,7 +832,7 @@ function openCamera(entity, name) {
   const modal = document.getElementById("camModal");
   const img = document.getElementById("camModalImg");
   if (!modal || !img) return;
-  const bigSrc = () => `/api/camera_proxy?entity=${encodeURIComponent(entity)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`;
+  const bigSrc = () => U(`/api/camera_proxy?entity=${encodeURIComponent(entity)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`);
   document.getElementById("camModalName").textContent = name || "Camera";
   img.src = bigSrc();
   modal.style.display = "flex";
@@ -901,7 +911,7 @@ let AUDIT_CACHE = [];
 async function exportAuditCsv(e) {
   if (e) e.preventDefault();
   try {
-    const res = await fetch("/api/audit.csv", { headers: { "Authorization": "Bearer " + TOKEN } });
+    const res = await fetch(U("/api/audit.csv"), { headers: { "Authorization": "Bearer " + TOKEN } });
     if (!res.ok) throw new Error("export failed");
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
@@ -993,7 +1003,7 @@ function urlB64ToUint8(base64) {
 async function registerSW() {
   if (!("serviceWorker" in navigator)) return;
   try {
-    swReg = await navigator.serviceWorker.register("/sw.js");
+    swReg = await navigator.serviceWorker.register(U("/sw.js"));
     if (swReg.pushManager) {
       const sub = await swReg.pushManager.getSubscription();
       pushEnabled = !!sub;
@@ -1008,7 +1018,7 @@ async function enablePush() {
   try {
     const perm = await Notification.requestPermission();
     if (perm !== "granted") return toast("🔔 Notifications were blocked — enable them in browser settings.");
-    if (!swReg) swReg = await navigator.serviceWorker.register("/sw.js");
+    if (!swReg) swReg = await navigator.serviceWorker.register(U("/sw.js"));
     await navigator.serviceWorker.ready;
     const { key } = await api("/api/push/key");
     const sub = await swReg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8(key) });
@@ -1026,7 +1036,7 @@ let streamRetry = null;
 function connectStream() {
   try { if (es) es.close(); } catch {}
   clearTimeout(streamRetry);
-  es = new EventSource("/api/stream?token=" + encodeURIComponent(TOKEN));
+  es = new EventSource(U("/api/stream?token=" + encodeURIComponent(TOKEN)));
   // The server sends "hello" on every (re)connect — pull fresh state so a device
   // that was asleep or briefly offline catches up on anything it missed.
   es.addEventListener("hello", () => { refresh().catch(() => {}); });
