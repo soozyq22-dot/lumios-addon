@@ -49,4 +49,5 @@ module.exports = {
   // has no real feeds, so it reports none.
   async listCameras() { await delay(); return []; },
   async cameraSnapshot(entityId) { throw new Error("No live camera in simulator mode"); },
+  async cameraStream(entityId) { throw new Error("No live camera in simulator mode"); },
 };

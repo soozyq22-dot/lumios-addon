@@ -789,67 +789,52 @@ function renderCams() {
 }
 
 /* ---- Live cameras (real feeds from Home Assistant) ----
-   Built once, then each tile's image refreshes on a timer for a near-live view. */
+   Built once; each tile shows a continuous live MJPEG video stream. */
 let liveCamsLoaded = false;
-let liveCamsTimer = null;
+function camStreamUrl(entity) { return U(`/api/camera_stream?entity=${encodeURIComponent(entity)}&token=${encodeURIComponent(TOKEN)}`); }
 async function renderLiveCams() {
   const wrap = document.getElementById("liveCams");
   if (!wrap) return;
-  if (!P().cameras) { clearInterval(liveCamsTimer); liveCamsTimer = null; liveCamsLoaded = false; wrap.innerHTML = ""; return; }
-  if (liveCamsLoaded) return;            // already built; images self-refresh
+  if (!P().cameras) { liveCamsLoaded = false; wrap.innerHTML = ""; return; }
+  if (liveCamsLoaded) return;            // already built; streams run continuously
   liveCamsLoaded = true;
   wrap.innerHTML = `<div class="hint">Finding your cameras…</div>`;
   let cams = [];
   try { cams = (await api("/api/cameras/live")).cameras || []; }
   catch (e) { wrap.innerHTML = `<div class="hint">Couldn't reach the cameras: ${e.message}</div>`; liveCamsLoaded = false; return; }
   if (!cams.length) { wrap.innerHTML = `<div class="hint">No live cameras found on the hub yet.</div>`; liveCamsLoaded = false; return; }
-  const src = (e) => U(`/api/camera_proxy?entity=${encodeURIComponent(e)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`);
   wrap.innerHTML = cams.map((c) => `
     <div class="cam livecam" data-camopen="${c.entity_id}" data-camname="${c.name}" title="Tap to enlarge">
-      <div class="feed"><img data-cament="${c.entity_id}" src="${src(c.entity_id)}" alt="${c.name}"
+      <div class="feed"><img data-camstream="${c.entity_id}" src="${camStreamUrl(c.entity_id)}" alt="${c.name}"
         onload="this.classList.remove('camerr')" onerror="this.classList.add('camerr')"></div>
       <div class="tag"><span>${c.name}</span><span class="live">● LIVE</span></div>
     </div>`).join("");
   wrap.querySelectorAll("[data-camopen]").forEach((t) => t.onclick = () => openCamera(t.dataset.camopen, t.dataset.camname));
-  clearInterval(liveCamsTimer);
-  liveCamsTimer = setInterval(() => {
-    if (document.hidden) return;         // don't hammer the hub while hidden
-    wrap.querySelectorAll("img[data-cament]").forEach((img) => {
-      // Preload the next frame off-screen; only swap it in once it actually
-      // loads. If a frame fails (a brief Reolink stream drop), we keep showing
-      // the last good picture instead of going blank.
-      const pre = new Image();
-      pre.onload = () => { img.src = pre.src; img.classList.remove("camerr"); };
-      pre.src = src(img.dataset.cament);
-    });
-  }, 2000);
+}
+// Pause camera streams while the page is hidden (saves hub + bandwidth); resume on return.
+function pauseLiveCams(hidden) {
+  const wrap = document.getElementById("liveCams"); if (!wrap) return;
+  wrap.querySelectorAll("img[data-camstream]").forEach((img) => {
+    if (hidden) img.src = "";
+    else img.src = camStreamUrl(img.dataset.camstream);
+  });
 }
 
-/* ---- enlarged single-camera view ---- */
-let bigCamTimer = null;
+/* ---- enlarged single-camera view (live stream) ---- */
 function openCamera(entity, name) {
   if (!entity) return;
   const modal = document.getElementById("camModal");
   const img = document.getElementById("camModalImg");
   if (!modal || !img) return;
-  const bigSrc = () => U(`/api/camera_proxy?entity=${encodeURIComponent(entity)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`);
   document.getElementById("camModalName").textContent = name || "Camera";
-  img.src = bigSrc();
+  img.src = camStreamUrl(entity);        // continuous live video
   modal.style.display = "flex";
-  clearInterval(bigCamTimer);
-  bigCamTimer = setInterval(() => {
-    if (document.hidden) return;
-    const pre = new Image();
-    pre.onload = () => { img.src = pre.src; };   // keep last frame on a hiccup
-    pre.src = bigSrc();
-  }, 1000);                                       // refresh faster for the focused view
 }
 function closeCamera() {
-  clearInterval(bigCamTimer); bigCamTimer = null;
   const modal = document.getElementById("camModal");
   if (modal) modal.style.display = "none";
   const img = document.getElementById("camModalImg");
-  if (img) img.src = "";
+  if (img) img.src = "";                 // closes the stream connection
 }
 
 /* ---- AI events feed (discreet monitoring) ---- */
@@ -1062,7 +1047,11 @@ function resync() {
 let resyncBound = false;
 function bindResync() {
   if (resyncBound) return; resyncBound = true;
-  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") resync(); });
+  document.addEventListener("visibilitychange", () => {
+    const hidden = document.visibilityState !== "visible";
+    pauseLiveCams(hidden);
+    if (!hidden) resync();
+  });
   window.addEventListener("focus", resync);
   window.addEventListener("online", resync);
 }

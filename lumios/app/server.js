@@ -379,6 +379,20 @@ const server = http.createServer(async (req, res) => {
         return res.end(buffer);
       } catch (e) { return err(res, 502, e.message); }
     }
+    // Live MJPEG video stream (continuous motion), piped from the hub.
+    if (method === "GET" && pathname === "/api/camera_stream") {
+      if (!p.cameras) return err(res, 403, "No camera access");
+      const entity = url.searchParams.get("entity") || "";
+      const ac = new AbortController();
+      req.on("close", () => ac.abort());
+      try {
+        const upstream = await dm.cameraStream(entity, ac.signal);
+        res.writeHead(200, { "Content-Type": upstream.headers.get("content-type") || "multipart/x-mixed-replace", "Cache-Control": "no-store", "Connection": "close" });
+        const { Readable } = require("stream");
+        Readable.fromWeb(upstream.body).pipe(res);
+        return;
+      } catch (e) { if (!res.headersSent) return err(res, 502, e.message); try { res.destroy(); } catch {} return; }
+    }
 
     // ---- AI camera detection ----
     if (method === "POST" && pathname === "/api/camera/ai") {

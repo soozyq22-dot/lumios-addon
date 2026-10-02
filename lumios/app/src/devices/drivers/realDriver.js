@@ -221,6 +221,14 @@ module.exports = {
     if (!res.ok) throw new Error(`camera_proxy ${res.status}`);
     return { buffer: Buffer.from(await res.arrayBuffer()), contentType: res.headers.get("content-type") || "image/jpeg" };
   },
+  // Live MJPEG stream (continuous motion) via Home Assistant's camera_proxy_stream.
+  // Returns the upstream fetch Response so the server can pipe it straight through.
+  async cameraStream(entityId, signal) {
+    if (!/^camera\.[a-z0-9_]+$/i.test(entityId)) throw new Error("Bad camera id");
+    const res = await fetch(`${HUB_URL}/api/camera_proxy_stream/${entityId}`, { headers: { "Authorization": `Bearer ${TOKEN}` }, signal });
+    if (!res.ok || !res.body) throw new Error(`camera_proxy_stream ${res.status}`);
+    return res;
+  },
 
   /* ---- state feedback: read device state BACK from Home Assistant ----
      So LumiOS reflects reality (wall switch, HA app, failed command) instead of
