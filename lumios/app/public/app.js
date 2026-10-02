@@ -789,14 +789,30 @@ function renderCams() {
 }
 
 /* ---- Live cameras (real feeds from Home Assistant) ----
-   Built once; each tile shows a continuous live MJPEG video stream. */
+   Snapshots fetched back-to-back: each frame loads, then the next is requested,
+   so it paces to the hub (as smooth as the connection allows) and holds the last
+   good frame on any hiccup instead of blanking. A generation counter stops old
+   loops when the grid rebuilds or the page is hidden. */
 let liveCamsLoaded = false;
-function camStreamUrl(entity) { return U(`/api/camera_stream?entity=${encodeURIComponent(entity)}&token=${encodeURIComponent(TOKEN)}`); }
+let camGen = 0;
+function snapSrc(entity) { return U(`/api/camera_proxy?entity=${encodeURIComponent(entity)}&token=${encodeURIComponent(TOKEN)}&t=${Date.now()}`); }
+function startCamLoop(img, entity, gapMs) {
+  const myGen = camGen;
+  const loop = () => {
+    if (myGen !== camGen || !img.isConnected) return;         // superseded or removed
+    if (document.hidden) { setTimeout(loop, 700); return; }   // idle while tab hidden
+    const pre = new Image();
+    pre.onload = () => { if (myGen === camGen) { img.src = pre.src; img.classList.remove("camerr"); setTimeout(loop, gapMs); } };
+    pre.onerror = () => { if (myGen === camGen) setTimeout(loop, 1000); };  // keep last frame, retry
+    pre.src = snapSrc(entity);
+  };
+  loop();
+}
 async function renderLiveCams() {
   const wrap = document.getElementById("liveCams");
   if (!wrap) return;
-  if (!P().cameras) { liveCamsLoaded = false; wrap.innerHTML = ""; return; }
-  if (liveCamsLoaded) return;            // already built; streams run continuously
+  if (!P().cameras) { camGen++; liveCamsLoaded = false; wrap.innerHTML = ""; return; }
+  if (liveCamsLoaded) return;
   liveCamsLoaded = true;
   wrap.innerHTML = `<div class="hint">Finding your cameras…</div>`;
   let cams = [];
@@ -805,36 +821,40 @@ async function renderLiveCams() {
   if (!cams.length) { wrap.innerHTML = `<div class="hint">No live cameras found on the hub yet.</div>`; liveCamsLoaded = false; return; }
   wrap.innerHTML = cams.map((c) => `
     <div class="cam livecam" data-camopen="${c.entity_id}" data-camname="${c.name}" title="Tap to enlarge">
-      <div class="feed"><img data-camstream="${c.entity_id}" src="${camStreamUrl(c.entity_id)}" alt="${c.name}"
-        onload="this.classList.remove('camerr')" onerror="this.classList.add('camerr')"></div>
+      <div class="feed"><img data-cament="${c.entity_id}" alt="${c.name}"></div>
       <div class="tag"><span>${c.name}</span><span class="live">● LIVE</span></div>
     </div>`).join("");
+  camGen++;
+  wrap.querySelectorAll("img[data-cament]").forEach((img) => startCamLoop(img, img.dataset.cament, 120));
   wrap.querySelectorAll("[data-camopen]").forEach((t) => t.onclick = () => openCamera(t.dataset.camopen, t.dataset.camname));
 }
-// Pause camera streams while the page is hidden (saves hub + bandwidth); resume on return.
-function pauseLiveCams(hidden) {
-  const wrap = document.getElementById("liveCams"); if (!wrap) return;
-  wrap.querySelectorAll("img[data-camstream]").forEach((img) => {
-    if (hidden) img.src = "";
-    else img.src = camStreamUrl(img.dataset.camstream);
-  });
-}
 
-/* ---- enlarged single-camera view (live stream) ---- */
+/* ---- enlarged single-camera view ---- */
+let bigCamGen = 0;
 function openCamera(entity, name) {
   if (!entity) return;
   const modal = document.getElementById("camModal");
   const img = document.getElementById("camModalImg");
   if (!modal || !img) return;
   document.getElementById("camModalName").textContent = name || "Camera";
-  img.src = camStreamUrl(entity);        // continuous live video
   modal.style.display = "flex";
+  bigCamGen++;
+  const myGen = bigCamGen;
+  const loop = () => {
+    if (myGen !== bigCamGen || modal.style.display === "none") return;
+    const pre = new Image();
+    pre.onload = () => { if (myGen === bigCamGen) { img.src = pre.src; setTimeout(loop, 90); } };
+    pre.onerror = () => { if (myGen === bigCamGen) setTimeout(loop, 800); };
+    pre.src = snapSrc(entity);
+  };
+  loop();
 }
 function closeCamera() {
+  bigCamGen++;
   const modal = document.getElementById("camModal");
   if (modal) modal.style.display = "none";
   const img = document.getElementById("camModalImg");
-  if (img) img.src = "";                 // closes the stream connection
+  if (img) img.src = "";
 }
 
 /* ---- AI events feed (discreet monitoring) ---- */
@@ -1048,9 +1068,11 @@ let resyncBound = false;
 function bindResync() {
   if (resyncBound) return; resyncBound = true;
   document.addEventListener("visibilitychange", () => {
-    const hidden = document.visibilityState !== "visible";
-    pauseLiveCams(hidden);
-    if (!hidden) resync();
+    if (document.visibilityState !== "visible") return;
+    resync();
+    // nudge the camera loops back to full speed on return
+    const wrap = document.getElementById("liveCams");
+    if (wrap) { camGen++; wrap.querySelectorAll("img[data-cament]").forEach((img) => startCamLoop(img, img.dataset.cament, 120)); }
   });
   window.addEventListener("focus", resync);
   window.addEventListener("online", resync);
