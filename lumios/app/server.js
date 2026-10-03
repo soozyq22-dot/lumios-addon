@@ -379,6 +379,12 @@ const server = http.createServer(async (req, res) => {
         return res.end(buffer);
       } catch (e) { return err(res, 502, e.message); }
     }
+    // Full-motion HLS: ask the hub to start a video stream, return the playable URL.
+    if (method === "GET" && pathname === "/api/camera_hls") {
+      if (!p.cameras) return err(res, 403, "No camera access");
+      const entity = url.searchParams.get("entity") || "";
+      try { return send(res, 200, { url: await dm.cameraStreamUrl(entity, "hls") }); } catch (e) { return err(res, 502, e.message); }
+    }
     // Live MJPEG video stream (continuous motion), piped from the hub.
     if (method === "GET" && pathname === "/api/camera_stream") {
       if (!p.cameras) return err(res, 403, "No camera access");

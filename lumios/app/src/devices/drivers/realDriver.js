@@ -229,6 +229,31 @@ module.exports = {
     if (!res.ok || !res.body) throw new Error(`camera_proxy_stream ${res.status}`);
     return res;
   },
+  // Ask Home Assistant (over its WebSocket API) to start a real video stream for
+  // this camera and return a playable HLS URL. HLS is short finite segment files,
+  // so it proxies cleanly and plays as true full motion in a <video> element.
+  async getStreamUrl(entityId, format = "hls") {
+    if (!/^camera\.[a-z0-9_]+$/i.test(entityId)) throw new Error("Bad camera id");
+    if (typeof WebSocket === "undefined") throw new Error("WebSocket unavailable (needs Node 22+)");
+    const wsUrl = HUB_URL.replace(/^http/, "ws") + "/api/websocket";
+    return await new Promise((resolve, reject) => {
+      const ws = new WebSocket(wsUrl);
+      const reqId = 2;
+      const finish = (fn, arg) => { clearTimeout(timer); try { ws.close(); } catch {} fn(arg); };
+      const timer = setTimeout(() => finish(reject, new Error("stream request timed out")), 12000);
+      ws.addEventListener("message", (ev) => {
+        let m; try { m = JSON.parse(ev.data); } catch { return; }
+        if (m.type === "auth_required") ws.send(JSON.stringify({ type: "auth", access_token: TOKEN }));
+        else if (m.type === "auth_ok") ws.send(JSON.stringify({ id: reqId, type: "camera/stream", entity_id: entityId, format }));
+        else if (m.type === "auth_invalid") finish(reject, new Error("hub auth rejected"));
+        else if (m.type === "result" && m.id === reqId) {
+          if (m.success && m.result && m.result.url) finish(resolve, m.result.url);
+          else finish(reject, new Error((m.error && m.error.message) || "camera/stream failed"));
+        }
+      });
+      ws.addEventListener("error", () => finish(reject, new Error("hub websocket error")));
+    });
+  },
 
   /* ---- state feedback: read device state BACK from Home Assistant ----
      So LumiOS reflects reality (wall switch, HA app, failed command) instead of

@@ -439,6 +439,10 @@ async function cameraStream(entityId, signal) {
   if (!driver.cameraStream) throw new Error("Live camera stream not available");
   return driver.cameraStream(entityId, signal);
 }
+async function cameraStreamUrl(entityId, format) {
+  if (!driver.getStreamUrl) throw new Error("Live video not available");
+  return driver.getStreamUrl(entityId, format);
+}
 
 /* ---------- unified security panel ---------- */
 async function setSecurity(locId, mode, ctx = {}) {
@@ -790,7 +794,7 @@ module.exports = {
   fridgeTick, recordFridgeTemp, listFridgeReadings,
   setRoomStatus, checklistTick, toggleChecklist,
   setDiffuser, setDisplay, buildDigest, pushDigest,
-  setCamera, getCameraFeed, listLiveCameras, cameraSnapshot, cameraStream,
+  setCamera, getCameraFeed, listLiveCameras, cameraSnapshot, cameraStream, cameraStreamUrl,
   setSecurity, powerSnapshot, setGrid, powerTick,
   raiseMotion,
 };
