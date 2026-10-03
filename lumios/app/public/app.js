@@ -829,28 +829,64 @@ async function renderLiveCams() {
   wrap.querySelectorAll("[data-camopen]").forEach((t) => t.onclick = () => openCamera(t.dataset.camopen, t.dataset.camname));
 }
 
-/* ---- enlarged single-camera view ---- */
+/* ---- enlarged single-camera view ----
+   Plays true full-motion HLS video; if the hub can't stream it for any reason,
+   falls back automatically to the smooth snapshot loop so you always see the
+   camera. */
 let bigCamGen = 0;
-function openCamera(entity, name) {
+let hls = null;
+async function openCamera(entity, name) {
   if (!entity) return;
   const modal = document.getElementById("camModal");
+  const video = document.getElementById("camModalVideo");
   const img = document.getElementById("camModalImg");
   if (!modal || !img) return;
   document.getElementById("camModalName").textContent = name || "Camera";
   modal.style.display = "flex";
   bigCamGen++;
   const myGen = bigCamGen;
-  const loop = () => {
-    if (myGen !== bigCamGen || modal.style.display === "none") return;
-    const pre = new Image();
-    pre.onload = () => { if (myGen === bigCamGen) { img.src = pre.src; setTimeout(loop, 90); } };
-    pre.onerror = () => { if (myGen === bigCamGen) setTimeout(loop, 800); };
-    pre.src = snapSrc(entity);
+  const snapshotFallback = () => {
+    if (video) video.style.display = "none";
+    img.style.display = "block";
+    const loop = () => {
+      if (myGen !== bigCamGen || modal.style.display === "none") return;
+      const pre = new Image();
+      pre.onload = () => { if (myGen === bigCamGen) { img.src = pre.src; setTimeout(loop, 90); } };
+      pre.onerror = () => { if (myGen === bigCamGen) setTimeout(loop, 800); };
+      pre.src = snapSrc(entity);
+    };
+    loop();
   };
-  loop();
+  try {
+    const { url } = await api(`/api/camera_hls?entity=${encodeURIComponent(entity)}`);
+    if (myGen !== bigCamGen) return;
+    if (!url || !video) throw new Error("no stream");
+    const master = U("/api/hls") + "?path=" + encodeURIComponent(url) + "&token=" + encodeURIComponent(TOKEN);
+    if (window.Hls && window.Hls.isSupported()) {
+      img.style.display = "none"; video.style.display = "block";
+      if (hls) { try { hls.destroy(); } catch {} }
+      hls = new Hls({ lowLatencyMode: true, backBufferLength: 10, manifestLoadingTimeOut: 12000 });
+      hls.loadSource(master);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.ERROR, (ev, data) => {
+        if (data && data.fatal) { try { hls.destroy(); } catch {} hls = null; if (myGen === bigCamGen) snapshotFallback(); }
+      });
+      video.play().catch(() => {});
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      img.style.display = "none"; video.style.display = "block";
+      video.src = master; video.play().catch(() => {});
+    } else {
+      snapshotFallback();
+    }
+  } catch (e) {
+    snapshotFallback();
+  }
 }
 function closeCamera() {
   bigCamGen++;
+  if (hls) { try { hls.destroy(); } catch {} hls = null; }
+  const video = document.getElementById("camModalVideo");
+  if (video) { try { video.pause(); } catch {} video.removeAttribute("src"); try { video.load(); } catch {} }
   const modal = document.getElementById("camModal");
   if (modal) modal.style.display = "none";
   const img = document.getElementById("camModalImg");

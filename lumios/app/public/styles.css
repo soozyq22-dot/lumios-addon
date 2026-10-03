@@ -110,7 +110,7 @@ select.mini{border:1px solid #e3d7de;border-radius:10px;padding:6px 8px;font-siz
 .cammodal-close{width:36px;height:36px;border-radius:50%;border:1px solid #3a2f38;background:#241c24;color:#fff;font-size:16px;cursor:pointer}
 .cammodal-close:hover{background:#332833}
 .cammodal-body{display:flex;align-items:center;justify-content:center;background:#000;min-height:0}
-.cammodal-body img{max-width:100%;max-height:calc(92vh - 60px);object-fit:contain;display:block}
+.cammodal-body img,.cammodal-body video{max-width:100%;max-height:calc(92vh - 60px);object-fit:contain;display:block;background:#000}
 .cam .tag{position:relative;padding:8px 10px;font-size:12px;display:flex;justify-content:space-between;width:100%;
   background:linear-gradient(transparent,rgba(0,0,0,.55))}
 .cam .live{color:#7CFC9B;font-weight:700}

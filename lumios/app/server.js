@@ -48,6 +48,25 @@ function tokenFrom(req, url) {
 function clientIp(req) {
   return (req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
 }
+// Rewrite the URLs inside an HLS manifest so the player fetches every variant,
+// init and segment back through our own /api/hls proxy (carrying the token).
+// Rewritten refs are query-only ("?path=...&token=...") so they resolve relative
+// to the manifest's own URL — which keeps working under Home Assistant ingress.
+function rewriteHls(text, manifestHaPath, token) {
+  const dir = manifestHaPath.slice(0, manifestHaPath.lastIndexOf("/") + 1);
+  const resolve = (ref) => {
+    if (/^https?:\/\//i.test(ref)) { try { const u = new URL(ref); return u.pathname + u.search; } catch { return ref; } }
+    if (ref.startsWith("/")) return ref;
+    return dir + ref;
+  };
+  const wrap = (ref) => "?path=" + encodeURIComponent(resolve(ref)) + "&token=" + encodeURIComponent(token);
+  return text.split("\n").map((line) => {
+    const t = line.trim();
+    if (!t) return line;
+    if (t.startsWith("#")) return line.replace(/URI="([^"]+)"/g, (m, u) => `URI="${wrap(u)}"`);
+    return wrap(t);
+  }).join("\n");
+}
 
 // resolve the location for a request: ?loc= or X-Location header, default main,
 // constrained to what the user may access.
@@ -384,6 +403,23 @@ const server = http.createServer(async (req, res) => {
       if (!p.cameras) return err(res, 403, "No camera access");
       const entity = url.searchParams.get("entity") || "";
       try { return send(res, 200, { url: await dm.cameraStreamUrl(entity, "hls") }); } catch (e) { return err(res, 502, e.message); }
+    }
+    // Proxy one HLS file (manifest or segment) from the hub. Manifests get their
+    // inner URLs rewritten back through this same endpoint so the player follows
+    // them. The token rides in the query so the <video> player can send it.
+    if (method === "GET" && pathname === "/api/hls") {
+      if (!p.cameras) return err(res, 403, "No camera access");
+      const haPath = url.searchParams.get("path") || "";
+      const tok = url.searchParams.get("token") || tokenFrom(req, url) || "";
+      try {
+        const out = await dm.hlsGet(haPath);
+        if (out.isManifest) {
+          res.writeHead(200, { "Content-Type": out.contentType, "Cache-Control": "no-store" });
+          return res.end(rewriteHls(out.text, haPath, tok));
+        }
+        res.writeHead(200, { "Content-Type": out.contentType, "Cache-Control": "no-store" });
+        return res.end(out.buffer);
+      } catch (e) { return err(res, 502, e.message); }
     }
     // Live MJPEG video stream (continuous motion), piped from the hub.
     if (method === "GET" && pathname === "/api/camera_stream") {

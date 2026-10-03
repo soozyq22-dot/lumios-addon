@@ -179,10 +179,14 @@
   <div class="cammodal">
     <div class="cammodal-head"><span id="camModalName"></span>
       <button class="cammodal-close" id="camModalClose" aria-label="Close">✕</button></div>
-    <div class="cammodal-body"><img id="camModalImg" alt="camera"></div>
+    <div class="cammodal-body">
+      <video id="camModalVideo" autoplay muted playsinline style="display:none"></video>
+      <img id="camModalImg" alt="camera">
+    </div>
   </div>
 </div>
 
+<script src="hls.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

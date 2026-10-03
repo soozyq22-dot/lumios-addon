@@ -443,6 +443,10 @@ async function cameraStreamUrl(entityId, format) {
   if (!driver.getStreamUrl) throw new Error("Live video not available");
   return driver.getStreamUrl(entityId, format);
 }
+async function hlsGet(haPath) {
+  if (!driver.hlsGet) throw new Error("HLS not available");
+  return driver.hlsGet(haPath);
+}
 
 /* ---------- unified security panel ---------- */
 async function setSecurity(locId, mode, ctx = {}) {
@@ -794,7 +798,7 @@ module.exports = {
   fridgeTick, recordFridgeTemp, listFridgeReadings,
   setRoomStatus, checklistTick, toggleChecklist,
   setDiffuser, setDisplay, buildDigest, pushDigest,
-  setCamera, getCameraFeed, listLiveCameras, cameraSnapshot, cameraStream, cameraStreamUrl,
+  setCamera, getCameraFeed, listLiveCameras, cameraSnapshot, cameraStream, cameraStreamUrl, hlsGet,
   setSecurity, powerSnapshot, setGrid, powerTick,
   raiseMotion,
 };
