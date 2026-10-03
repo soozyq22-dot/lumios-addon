@@ -254,14 +254,18 @@ module.exports = {
       ws.addEventListener("error", () => finish(reject, new Error("hub websocket error")));
     });
   },
-  // Fetch one HLS file (manifest or video segment) from Home Assistant. Returns
-  // the text to rewrite for a manifest, or the raw bytes for a segment.
-  async hlsGet(haPath) {
-    if (!/^\/api\/hls\/[A-Za-z0-9/_.\-]+$/.test(haPath)) throw new Error("Bad HLS path");
-    const res = await fetch(`${HUB_URL}${haPath}`, { headers: { "Authorization": `Bearer ${TOKEN}` } });
+  // Fetch one HLS file (manifest or video segment) from Home Assistant. The path
+  // may carry Low-Latency HLS query params (_HLS_msn/_HLS_part) which MUST be
+  // forwarded so the hub blocks until the next part is ready (otherwise the
+  // player spins in a tight loop). Returns manifest text to rewrite, or segment bytes.
+  async hlsGet(haPathWithQuery) {
+    const qi = haPathWithQuery.indexOf("?");
+    const pathOnly = qi >= 0 ? haPathWithQuery.slice(0, qi) : haPathWithQuery;
+    if (!/^\/api\/hls\/[A-Za-z0-9/_.\-]+$/.test(pathOnly)) throw new Error("Bad HLS path");
+    const res = await fetch(`${HUB_URL}${haPathWithQuery}`, { headers: { "Authorization": `Bearer ${TOKEN}` } });
     if (!res.ok) throw new Error(`hls ${res.status}`);
     const ct = res.headers.get("content-type") || "";
-    if (haPath.endsWith(".m3u8") || ct.includes("mpegurl"))
+    if (pathOnly.endsWith(".m3u8") || ct.includes("mpegurl"))
       return { isManifest: true, text: await res.text(), contentType: "application/vnd.apple.mpegurl" };
     return { isManifest: false, buffer: Buffer.from(await res.arrayBuffer()), contentType: ct || "video/mp4" };
   },

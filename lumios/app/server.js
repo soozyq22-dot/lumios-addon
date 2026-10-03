@@ -411,8 +411,12 @@ const server = http.createServer(async (req, res) => {
       if (!p.cameras) return err(res, 403, "No camera access");
       const haPath = url.searchParams.get("path") || "";
       const tok = url.searchParams.get("token") || tokenFrom(req, url) || "";
+      // Forward Low-Latency HLS params (_HLS_msn/_HLS_part/_HLS_skip) to the hub.
+      const extra = [];
+      for (const [k, v] of url.searchParams) { if (k !== "path" && k !== "token") extra.push(encodeURIComponent(k) + "=" + encodeURIComponent(v)); }
+      const haFull = haPath + (extra.length ? (haPath.includes("?") ? "&" : "?") + extra.join("&") : "");
       try {
-        const out = await dm.hlsGet(haPath);
+        const out = await dm.hlsGet(haFull);
         if (out.isManifest) {
           res.writeHead(200, { "Content-Type": out.contentType, "Cache-Control": "no-store" });
           return res.end(rewriteHls(out.text, haPath, tok));
