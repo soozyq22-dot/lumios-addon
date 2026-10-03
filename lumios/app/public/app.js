@@ -863,15 +863,19 @@ async function openCamera(entity, name) {
     if (!url || !video) throw new Error("no stream");
     const master = U("/api/hls") + "?path=" + encodeURIComponent(url) + "&token=" + encodeURIComponent(TOKEN);
     if (window.Hls && window.Hls.isSupported()) {
-      img.style.display = "none"; video.style.display = "block";
+      img.style.display = "none"; video.style.display = "block"; video.muted = true;
       if (hls) { try { hls.destroy(); } catch {} }
       hls = new Hls({ lowLatencyMode: true, backBufferLength: 10, manifestLoadingTimeOut: 12000 });
+      // Start playback once the stream actually has data — calling play() before
+      // then silently fails (no autoplay on an empty buffer).
+      const tryPlay = () => { if (myGen === bigCamGen) video.play().catch(() => {}); };
+      hls.on(Hls.Events.MANIFEST_PARSED, tryPlay);
+      hls.on(Hls.Events.FRAG_BUFFERED, tryPlay);
       hls.loadSource(master);
       hls.attachMedia(video);
       hls.on(Hls.Events.ERROR, (ev, data) => {
         if (data && data.fatal) { try { hls.destroy(); } catch {} hls = null; if (myGen === bigCamGen) snapshotFallback(); }
       });
-      video.play().catch(() => {});
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
       img.style.display = "none"; video.style.display = "block";
       video.src = master; video.play().catch(() => {});
