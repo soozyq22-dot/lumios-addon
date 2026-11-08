@@ -1146,6 +1146,10 @@ async function boot() {
 
 /* ---------- init ---------- */
 renderPad();
+// On a live (non-demo) install, hide the demo-login hints from the sign-in screen.
+fetch(U("/api/public/config")).then((r) => r.json()).then((c) => {
+  if (c && c.demo === false) { const el = document.getElementById("demoCreds"); if (el) el.style.display = "none"; }
+}).catch(() => {});
 bindInstall();
 setInterval(tick, 1000); tick();
 document.getElementById("twoCode")?.addEventListener("keydown", (e) => { if (e.key === "Enter") do2FA(); });

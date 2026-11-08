@@ -7,6 +7,11 @@
 
    Run:  node server.js     →  http://localhost:4200
    ============================================================ */
+// Default the clock to the salon's timezone so scheduled scenes fire on the
+// right wall-clock time even if the container's TZ wasn't set. (The HA add-on
+// also sets TZ in its Dockerfile; this covers standalone runs.)
+process.env.TZ = process.env.TZ || "America/Chicago";
+
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
@@ -201,6 +206,11 @@ const server = http.createServer(async (req, res) => {
     const b = await readBody(req);
     try { return send(res, 200, auth.loginPin(b.pin, clientIp(req))); }
     catch (e) { return err(res, 401, e.message); }
+  }
+  // Public (pre-login): lets the sign-in screen hide the demo credentials when
+  // this is a live install. Exposes nothing sensitive — just the driver mode.
+  if (method === "GET" && pathname === "/api/public/config") {
+    return send(res, 200, { demo: dm.driverName === "mock" });
   }
 
   // --- everything below /api requires a session ---
