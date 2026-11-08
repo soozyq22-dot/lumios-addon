@@ -23,7 +23,7 @@ module.exports = {
   LOCK_RATE_LIMIT: { max: 8, windowSec: 60 }, // door lock/unlock throttle
   LOGIN_LOCKOUT: { max: 5, windowSec: 300 },  // per-ACCOUNT password lockout (5 fails → 5-min lock)
   PIN_THROTTLE:  { max: 10, windowSec: 60 },   // global PIN rate cap: tolerant of fumbles, heals in 60s, caps brute-force
-  REQUIRE_OWNER_2FA: true,        // owner must pass a 2nd factor — even via PIN (no bypass)
+  REQUIRE_OWNER_2FA: false,       // owner signs in directly (no 2nd-factor code). Set true to re-require a code — needs LUMIOS_2FA_WEBHOOK wired for remote delivery.
   SYNC_INTERVAL_MS: 10000,        // real driver: how often to read device state back from the hub
 
   // Business hours used by the scheduler & after-hours triggers.
